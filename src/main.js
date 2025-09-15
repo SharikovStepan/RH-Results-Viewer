@@ -5,8 +5,12 @@ import { addLocalFile, startLocalFile } from "./js/localFileRead";
 import { tabSwitch, roundStatsStrokeWidthChange, moveMonth } from "./js/uiChange";
 import { loadFilesList, loadLastFile, urlUpload, loadDateFile } from "./js/loadData";
 import { setState, getState, getButton, getLocalFileElement, getTab } from "./js/sharedStates";
+import { averageTime, timeDiff } from "./js/utils";
 
 ////////////////////////////////////////////
+
+const checkPauses = false;
+
 if (window.matchMedia("((hover: none) and (pointer: coarse))").matches) {
   //Анимация кнопок на тач экранах
   document.addEventListener("click", function (event) {
@@ -89,6 +93,101 @@ getButton("leaderboard").addEventListener("click", function () {
 
 getButton("rounds").addEventListener("click", function () {
   tabSwitch(getTab("main")[2].name, getTab("main"), "main");
+
+  if (checkPauses) {
+    const heatsNums = getState("mainObj")["heats_by_class"][getState("currentClass")];
+
+    //  const heatsNums = [1, 2, 3, 4];
+
+    const heatsData = heatsNums
+      .map((heatNum) => {
+        const heatFromResults = getState("mainObj")["heats"][heatNum];
+        if (heatFromResults) {
+          return heatFromResults;
+        } else {
+          return {};
+        }
+      })
+      .filter((heatData) => heatData.heat_id);
+
+    const roundsQuals = [];
+    let roundId = 1;
+    const circles = 5; //колличество кругов всех групп
+    for (let i = 1; i <= circles; i++) {
+      const roundsHeat = heatsData.map((heat) => {
+        const roundsInHeat = heat.rounds;
+
+        const filtered = roundsInHeat.filter((round) => round.id == roundId || round.id == roundId + 1); //Количество раундов вылете - 2
+        return filtered;
+      });
+      roundsQuals.push(...roundsHeat);
+      roundId = roundId + 2;
+    }
+    console.log("roundsQuals", roundsQuals);
+
+    const timesBetweenRounds = [];
+    roundsQuals.forEach((rounds) => {
+      const roundsTimeStarts = rounds.map((round) => {
+        console.log("roundround", round);
+
+        return { heatId: round.heatId, heatName: round.heatName, roundId: `${round.id}`, timeStart: round.start_time_formatted.split(" ")[1] };
+      });
+      console.log("roundsTimeStartsroundsTimeStarts", roundsTimeStarts);
+
+      const heatId = roundsTimeStarts[0].heatId;
+      const heatName = roundsTimeStarts[0].heatName;
+      const roundsId = `${roundsTimeStarts[0].roundId} - ${roundsTimeStarts[1].roundId}`;
+      const prevRound = roundsTimeStarts[0].timeStart;
+      const nextRound = roundsTimeStarts[1].timeStart;
+      const diff = timeDiff(prevRound, nextRound, 1, 45);
+      timesBetweenRounds.push({ heatId, heatName, roundsId, diff, prevRound, nextRound });
+    });
+
+    const sortedRoundsTime = timesBetweenRounds.sort((a, b) => +a.heatId - +b.heatId);
+    console.log("timesBetweenRounds", sortedRoundsTime);
+    const diffsRound = [];
+
+    sortedRoundsTime.forEach((round) => {
+      if (diffsRound.length == 0) {
+        diffsRound.push({ heatId: round.heatId, heatName: round.heatName, diffs: [round.diff] });
+      } else if (diffsRound.length > 0 && diffsRound[diffsRound.length - 1].heatId == round.heatId) {
+        diffsRound[diffsRound.length - 1].diffs.push(round.diff);
+      } else {
+        diffsRound.push({ heatId: round.heatId, heatName: round.heatName, diffs: [round.diff] });
+      }
+    });
+    const avgTimesRound = diffsRound.map((heat) => {
+      const avg = averageTime(heat.diffs);
+      return { heatName: heat.heatName, AVG: avg };
+    });
+
+    console.log("avgTimesRound", avgTimesRound);
+
+    const avgTimesRoundsArr = avgTimesRound.map((time) => time.AVG);
+    const fullAvgTimesRounds = averageTime(avgTimesRoundsArr);
+
+    console.log("fullAvgTimesRounds", fullAvgTimesRounds);
+
+    const timesBetweenHeats = [];
+    roundsQuals.forEach((heat, index) => {
+      const lastRoundTime = heat[1].start_time_formatted.split(" ")[1];
+      const nextIndex = index + 1 == roundsQuals.length ? roundsQuals.length - 1 : index + 1;
+
+      const firstRoundsNextStart = roundsQuals[nextIndex][0].start_time_formatted.split(" ")[1];
+
+      timesBetweenHeats.push({
+        heats: `${heat[0].heatName} - ${roundsQuals[nextIndex][0].heatName}`,
+        diff: timeDiff(lastRoundTime, firstRoundsNextStart, 1, 45),
+        prev: lastRoundTime,
+        next: firstRoundsNextStart,
+      });
+    });
+
+    console.log(timesBetweenHeats);
+    const diffsHeats = timesBetweenHeats.map((diff) => diff.diff);
+    const avgTimesHeats = averageTime(diffsHeats);
+    console.log("СРЕДНЕЕ", avgTimesHeats);
+  }
 });
 
 window.addEventListener("resize", function () {

@@ -4,12 +4,14 @@ import { getState, getTab, subscribe, unsubscribe } from "../../js/sharedStates"
 import HorizontalTable from "./HorizontalTable";
 import DirectionSwitcher from "./DirectionSwitcher";
 
-import { getResultRaces, setDuelPlaces, setRaceScores, setRaceStatus, getPlannedRaces, addEmptyRaces, getChannelsAndColors } from "./utils";
+import { getResultRaces, setDuelPlaces, setRaceScores, setRaceStatus, getPlannedRaces, addEmptyRaces, getChannelsAndColors, getRoundsPauses, getRacesPauses, getRacesTime } from "./utils";
 import { tabSwitch } from "../../js/uiChange";
 import { getParamTabIndex } from "../../js/utils";
 import { div } from "motion/react-client";
 import VerticalTable from "./VerticalTable";
 import { COLORS } from "./const";
+
+const checkPauses = false;
 
 function Tournament({ fullRHData, currentClass }) {
   const [fullData, setFullData] = useState(fullRHData);
@@ -32,12 +34,11 @@ function Tournament({ fullRHData, currentClass }) {
   const duplicatedHeatsId = duplicatedHeatsData.map((heat) => heat.heatId);
   const duplicateIds = duplicatedHeatsData.map((heat) => heat.duplicateId);
 
-  const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass)
+  const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
 
   const noResultsHeats = allSlots.filter((slot) => slot.isResults == false).filter((heat) => duplicateIds?.includes(heat.heatId) == false);
 
-  console.log('allSlotsallSlots',allSlots);
-  
+  console.log("allSlotsallSlots", allSlots);
 
   const heatsNum = getState("mainObj")["heats_by_class"][raceClass];
   const heatsNumSorted = [];
@@ -85,10 +86,8 @@ function Tournament({ fullRHData, currentClass }) {
     })
     .flat();
 
-  console.log("roundsroundsrounds", rounds);
-
   //собираем массив всех выполненных гонок
-  const races = getResultRaces(rounds,allSlots);
+  const races = getResultRaces(rounds, allSlots);
 
   //Ставим баллы за дуэли, если они есть
   const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
@@ -107,6 +106,12 @@ function Tournament({ fullRHData, currentClass }) {
 
   //делаем массив всех гонок(+пусые)
   const allRaces = allKnownRaces.length == raceQuantity ? allKnownRaces : addEmptyRaces(allKnownRaces, raceQuantity, pilotsPerHeat);
+
+  if (checkPauses) {
+    getRacesPauses(allRaces);
+    getRoundsPauses(allRaces);
+    getRacesTime(allRaces);
+  }
 
   console.log("heatsheats", heatsData);
   console.log("roundsrounds", rounds);

@@ -1,3 +1,5 @@
+import { averageTime } from "../../js/utils";
+
 export const setEmptyRace = (pilotsQuatity) => {
   const pilotsId = Array.from({ length: pilotsQuatity }, (_, index) => 0);
   const pilotsRacePlaces = Array.from({ length: pilotsQuatity }, (_, index) => {
@@ -65,7 +67,21 @@ export const getResultRaces = (roundsArr, allSlots) => {
         return { ...raceSum, place: place };
       });
 
-    const roundInfo = { roundId: +round.id, heatId: +round.heatId };
+    const noEmptyLaps = pilotsRoundPlaces.filter((round) => round.time != 0);
+    const lapsquantity = noEmptyLaps.map((round) => round.laps);
+    const maxLaps = Math.max(...lapsquantity);
+
+    const fullRoundLaps = noEmptyLaps.filter((round) => round.laps == maxLaps);
+    const lastLapTime = fullRoundLaps[fullRoundLaps.length - 1]?.time;
+    const roundEndTime = getEndRoundTime(round.start_time_formatted.split(" ")[1], lastLapTime);
+
+    const roundInfo = {
+      roundId: +round.id,
+      heatId: +round.heatId,
+      roundStartTime: round.start_time_formatted.split(" ")[1],
+      roundEndTime: roundEndTime,
+      MES: `${round.start_time_formatted.split(" ")[1]}-${lastLapTime}`,
+    };
 
     if (races.length === 0) {
       const raceData = { pilotsId, pilotsNames, pilotsRoundPlaces: [pilotsRoundPlaces], roundInfo: [roundInfo], roundsSum: 1 };
@@ -285,16 +301,130 @@ export const getChannelsAndColors = (channelRawData, colorsArr) => {
   return channelsAndColors;
 };
 
-// export const getColors = (channelRawData, colorsArr) => {
-//   const bands = channelRawData.frequencies.b;
-//   const channels = channelRawData.frequencies.c;
-//   const bandFiltered = bands.filter((band) => band != null);
-//   const channelsFiltered = channels.filter((channel) => channel != null);
-//   const colors = bandFiltered.map((band, index) => {
-//     const colorData = {};
-//     colorData.channel = `${band}${channelsFiltered[index]}`;
-//     colorData.color = colorsArr[index];
-//     return colorData;
-//   });
-//   return colors;
-// };
+export const getRacesTime = (allRaces) => {
+  const raceTimes = [];
+  allRaces.forEach((race, index) => {
+    const raceInfo = {};
+    const raceIndex = index + 1;
+    const rounds = race.roundInfo;
+    const firstRound = rounds[0];
+    const lastRound = rounds[rounds.length - 1];
+    //  console.log("firstRound", firstRound);
+    //  console.log("lastRound", lastRound);
+
+    const raceTime = getTimeDiff(firstRound.roundStartTime, lastRound.roundEndTime);
+
+    raceInfo.race = raceIndex;
+    raceInfo.roundsQuantity = rounds.length;
+    raceInfo.time = raceTime;
+    raceInfo.start = firstRound.roundStartTime;
+    raceInfo.end = lastRound.roundEndTime;
+    raceTimes.push(raceInfo);
+  });
+  const raceTimesTimesArr = raceTimes.map((time) => time.time);
+  const raceTimesTimesAVG = averageTime(raceTimesTimesArr);
+
+  console.log("raceTimes", raceTimes);
+  console.log("raceTimesTimesAVG", raceTimesTimesAVG);
+};
+
+export const getRoundsPauses = (allRaces) => {
+  const pauseRoundsTimes = [];
+  allRaces.forEach((race, index) => {
+    const raceIndex = index + 1;
+    const rounds = race.roundInfo;
+    rounds.forEach((round, index) => {
+      const roundInfo = {};
+      const currentRoundEnd = round.roundEndTime;
+      const nextIndex = rounds.length != index + 1 ? index + 1 : index;
+      const nextRoundStart = rounds[nextIndex].roundStartTime;
+      const pauseTime = getTimeDiff(currentRoundEnd, nextRoundStart);
+      roundInfo.race = raceIndex;
+      // roundInfo.heatId = round.heatId;
+      roundInfo.rounds = `${round.roundId}-${rounds[nextIndex].roundId}`;
+      roundInfo.pauseTime = pauseTime;
+      roundInfo.roundEnd = currentRoundEnd;
+      roundInfo.nextRoundStart = nextRoundStart;
+      if (index != rounds.length - 1) pauseRoundsTimes.push(roundInfo);
+    });
+  });
+  const pauseRoundsTimesArr = pauseRoundsTimes.map((time) => time.pauseTime);
+  const pauseRoundsTimesAVG = averageTime(pauseRoundsTimesArr);
+
+  console.log("pauseRoundsTimes", pauseRoundsTimes);
+  console.log("pauseRoundsTimesAVG", pauseRoundsTimesAVG);
+};
+
+export const getRacesPauses = (allRaces) => {
+  const pauseHeatTimes = [];
+
+  allRaces.forEach((race, index) => {
+    const pauseInfo = {};
+    const lastRound = race.roundInfo[race.roundInfo.length - 1];
+    const nextIndex = allRaces.length != index + 1 ? index + 1 : index;
+    const nextRaceRound = allRaces[nextIndex].roundInfo[0];
+    const pauseTime = getTimeDiff(lastRound.roundEndTime, nextRaceRound.roundStartTime);
+    pauseInfo.races = `${index + 1}-${index + 2}`;
+
+    //  pauseInfo.heats = `${lastRound.heatId}-${nextRaceRound.heatId}`;
+    //  pauseInfo.rounds = `${lastRound.roundId}-${nextRaceRound.roundId}`;
+    pauseInfo.pauseTime = pauseTime;
+    pauseInfo.lastRoundEnd = lastRound.roundEndTime;
+    pauseInfo.nextRoundStart = nextRaceRound.roundStartTime;
+    if (index != allRaces.length - 1) pauseHeatTimes.push(pauseInfo);
+  });
+  const pauseHeatTimesArr = pauseHeatTimes.map((time) => time.pauseTime);
+  const pauseHeatTimesAVG = averageTime(pauseHeatTimesArr);
+
+  console.log("pauseHeatTimes", pauseHeatTimes);
+  console.log("pauseHeatTimesAVG", pauseHeatTimesAVG);
+};
+
+export const getEndRoundTime = (timeString, milliseconds) => {
+  // Разбиваем время на компоненты
+  const [hours, minutes, secondsWithMs] = timeString.split(":");
+  const [seconds, millisecondsPart] = secondsWithMs.split(".");
+
+  // Преобразуем все в миллисекунды
+  const totalOriginalMs = parseInt(hours) * 3600000 + parseInt(minutes) * 60000 + parseInt(seconds) * 1000 + parseInt(millisecondsPart);
+
+  // Прибавляем миллисекунды
+  const totalResultMs = totalOriginalMs + Math.round(milliseconds);
+
+  // Вычисляем новые компоненты времени
+  const resultHours = Math.floor(totalResultMs / 3600000) % 24;
+  const resultMinutes = Math.floor((totalResultMs % 3600000) / 60000);
+  const resultSeconds = Math.floor((totalResultMs % 60000) / 1000);
+  const resultMilliseconds = totalResultMs % 1000;
+
+  // Форматируем результат
+  return `${resultHours.toString().padStart(2, "0")}:${resultMinutes.toString().padStart(2, "0")}:${resultSeconds.toString().padStart(2, "0")}.${resultMilliseconds.toString().padStart(3, "0")}`;
+};
+
+export function getTimeDiff(time1, time2) {
+  // Функция для преобразования времени в миллисекунуды
+  function timeToMilliseconds(timeString) {
+    const [hours, minutes, secondsWithMs] = timeString.split(":");
+    const [seconds, milliseconds] = secondsWithMs.split(".");
+
+    return parseInt(hours) * 3600000 + parseInt(minutes) * 60000 + parseInt(seconds) * 1000 + parseInt(milliseconds);
+  }
+
+  // Конвертируем оба времени в миллисекунды
+  const ms1 = timeToMilliseconds(time1);
+  const ms2 = timeToMilliseconds(time2);
+
+  // Вычисляем разницу
+  const differenceMs = Math.abs(ms2 - ms1);
+
+  // Преобразуем разницу обратно в читаемый формат
+  const hours = Math.floor(differenceMs / 3600000);
+  const minutes = Math.floor((differenceMs % 3600000) / 60000);
+  const seconds = Math.floor((differenceMs % 60000) / 1000);
+  const milliseconds = differenceMs % 1000;
+
+  // Форматируем результат
+  const formatted = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+
+  return formatted;
+}

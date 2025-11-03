@@ -3,10 +3,14 @@ import { DOUBLE_ELIM_GRIDS } from "./const";
 import ChannelAndColor from "../ChannelAndColor";
 function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilot, doubleElimLows, activeRaces, pilotsQuantity }) {
   const [isCurrentRace, isCompleteRace, isNextRace] = activeRaces || [];
+
+  const raceStatus = raceData.status;
+  const losersNums = Array.from({ length: pilotsQuantity / 2 }, (_, index) => pilotsQuantity - 1 - index);
+
   return (
     <>
       <div
-        className={`tournament__race ${doubleElimLows?.includes(raceIndex + 1) ? "_low-table" : ""} 
+        className={`tournament__race ${doubleElimLows?.includes(raceIndex + 1) ? "_low-table" : ""} ${raceStatus == "complete" ? "completed" : ""} 
 		  ${isCurrentRace == raceIndex ? "_current-race" : ""} ${isCompleteRace == raceIndex ? "_last-complete-race" : ""} ${isNextRace == raceIndex ? "_next-race" : ""}`}
         style={{ gridRow: `${gridPositionsData[raceIndex]?.gridRow}`, gridColumn: `${gridPositionsData[raceIndex]?.gridColumn}` }}>
         <div className="tournament__race-tittles">
@@ -30,6 +34,7 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
             const pilotName = pilotInfo?.name;
 
             const pilotPlace = pilotData.place;
+
             return (
               <motion.div
                 layout
@@ -37,9 +42,12 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
                 key={`pilot-${pilotData.id ? pilotData.id : index + 999}-race-${raceIndex}`}
                 name={`pilot-${pilotData.id ? pilotData.id : index + 999}-race-${raceIndex}`}
                 className="tournament__pilot-items">
-                <div pilot-id={pilotData.id} onClick={pilotButton} className={`tournament__pilot-name _name-item _race-item ${activePilot == pilotData.id ? "_active" : ""}`}>
+                <div
+                  pilot-id={pilotData.id}
+                  onClick={pilotButton}
+                  className={`tournament__pilot-name _name-item _race-item ${activePilot == pilotData.id ? "_active" : ""} ${losersNums.includes(index) ? "loser" : ""}`}>
                   <p>{pilotPlace}</p>
-                  {pilotName}
+                  <p>{pilotName}</p>
                   {channelData && <ChannelAndColor channel={channelData.channel} color={channelData.color} />}
                 </div>
                 <div

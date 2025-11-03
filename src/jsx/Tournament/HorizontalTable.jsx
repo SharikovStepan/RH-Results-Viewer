@@ -4,7 +4,7 @@ import { DOUBLE_ELIM_GRIDS } from "./const";
 
 import { getState } from "../../js/sharedStates";
 
-function HorizontalTable({channelsAndColors, raceData, activePilot }) {
+function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
   const [activePilotId, setActivePilotId] = useState(null);
   const [activeRaces, setActiveRaces] = useState("");
 
@@ -31,7 +31,7 @@ function HorizontalTable({channelsAndColors, raceData, activePilot }) {
 
   return (
     <>
-      <div className="tournament__full-table" style={{ gridTemplateRows: `repeat(24, minmax(${getState("tournamentPilotsPerHeat")*15+2}px, auto)` }}>
+      <div className="tournament__full-table" style={{ gridTemplateRows: `repeat(24, minmax(${getState("tournamentPilotsPerHeat") * 8 + 2}px, auto)` }}>
         {raceData.map((race, index) => {
           return (
             <RaceCard
@@ -44,7 +44,7 @@ function HorizontalTable({channelsAndColors, raceData, activePilot }) {
               doubleElimLows={DOUBLE_ELIM_GRIDS.lowTableRaces}
               activeRaces={activeRaces}
               pilotsQuantity={getState("tournamentPilotsPerHeat")}
-				  channelsAndColors={channelsAndColors}
+              channelsAndColors={channelsAndColors}
             />
           );
         })}

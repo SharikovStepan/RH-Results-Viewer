@@ -2250,13 +2250,11 @@ export async function tournamentRender(isTournament, isEmptyHeats, fileType) {
     setTab("main", [...mainTabs, { name: "tournament", opened: false, element: document.querySelector(".tournament") }]);
 
     //Рендерим её
-    console.log("StartRender");
 
     setState("reactRoot", createRoot(tournamentTab));
 
     getState("reactRoot").render(<Tournament fullRHData={getState("fullRHData")} currentClass={getState("currentClass")} />);
 
-    console.log("endRender");
 
     //добавляем кнопку, если ещё нет
     if (!document.querySelector(".buttons__tournament")) {
@@ -2268,7 +2266,6 @@ export async function tournamentRender(isTournament, isEmptyHeats, fileType) {
 
       //добавляем клик по кнопки вкладки
       getButton("tournament").addEventListener("click", function () {
-        console.log("TRY OPEN");
 
         tabSwitch(getTab("main")[3].name, getTab("main"), "main");
       });

@@ -10,6 +10,7 @@ import { getParamTabIndex } from "../../js/utils";
 import { div } from "motion/react-client";
 import VerticalTable from "./VerticalTable";
 import { COLORS } from "./const";
+import Quals from "./Quals/Quals";
 
 const checkPauses = false;
 
@@ -17,9 +18,15 @@ function Tournament({ fullRHData, currentClass }) {
   const [fullData, setFullData] = useState(fullRHData);
   const [raceClass, setRaceClass] = useState(currentClass);
 
+  let qualsLeaderboard = [];
+  let qualsInfo = [];
+  let raceInfo = [];
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1023);
 
   const [activeTabId, setActiveTabId] = useState(1);
+
+  const tournamentTypeInfo = fullData.finalTypesByClass.find((type) => type.raceClassId == raceClass);
 
   const results = fullData.results;
 
@@ -34,13 +41,15 @@ function Tournament({ fullRHData, currentClass }) {
   const duplicatedHeatsId = duplicatedHeatsData.map((heat) => heat.heatId);
   const duplicateIds = duplicatedHeatsData.map((heat) => heat.duplicateId);
 
+  console.log("duplicateIds", duplicatedHeatsData);
+
   const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
 
   const noResultsHeats = allSlots.filter((slot) => slot.isResults == false).filter((heat) => duplicateIds?.includes(heat.heatId) == false);
 
   console.log("allSlotsallSlots", allSlots);
 
-  const heatsNum = getState("mainObj")["heats_by_class"][raceClass];
+  const heatsNum = fullData.results["heats_by_class"][raceClass];
   const heatsNumSorted = [];
   heatsNum.forEach((num) => {
     if (duplicatedHeatsId?.includes(num)) {
@@ -57,10 +66,6 @@ function Tournament({ fullRHData, currentClass }) {
 
   const deletedRounds = fullData.deletedRounds;
   const deletedRoundsInHeats = deletedRounds.filter((data) => heatsNumSorted.includes(data.heatId));
-
-  //   const heatsData = Object.entries(results["heats"])
-  //     .filter(([key]) => heatsNumSorted.includes(+key))
-  //     .map(([, value]) => value);
 
   const heatsData = heatsNumSorted
     .map((heatNum) => {
@@ -86,26 +91,138 @@ function Tournament({ fullRHData, currentClass }) {
     })
     .flat();
 
-  //собираем массив всех выполненных гонок
-  const races = getResultRaces(rounds, allSlots);
+  console.log("rounds", rounds);
 
-  //Ставим баллы за дуэли, если они есть
-  const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
+  if (tournamentTypeInfo.finalType == "double16") {
+    //собираем массив всех выполненных гонок
+    const races = getResultRaces(rounds, allSlots);
 
-  //Здесь счет каждой гонки, уже не раунда
-  const racesWithScore = setRaceScores(raceWithDuels);
+    //Ставим баллы за дуэли, если они есть
+    const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
 
-  //ставим статус complete и проверяем последнюю гонку, complete она или нет
-  const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity);
+    //Здесь счет каждой гонки, уже не раунда
+    const racesWithScore = setRaceScores(raceWithDuels);
 
-  //собираем массив предстоящих гонок
-  const plannedRaces = getPlannedRaces(noResultsHeats, roundsQuantity, pilotsPerHeat);
+    //ставим статус complete и проверяем последнюю гонку, complete она или нет
+    const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity);
 
-  //соединяем два массива Results и noResults
-  const allKnownRaces = [...racesWithStatus, ...plannedRaces];
+    //собираем массив предстоящих гонок
+    const plannedRaces = getPlannedRaces(noResultsHeats, roundsQuantity, pilotsPerHeat);
 
-  //делаем массив всех гонок(+пусые)
-  const allRaces = allKnownRaces.length == raceQuantity ? allKnownRaces : addEmptyRaces(allKnownRaces, raceQuantity, pilotsPerHeat);
+    //соединяем два массива Results и noResults
+    const allKnownRaces = [...racesWithStatus, ...plannedRaces];
+
+    //делаем массив всех гонок(+пусые)
+    raceInfo = allKnownRaces.length == raceQuantity ? allKnownRaces : addEmptyRaces(allKnownRaces, raceQuantity, pilotsPerHeat);
+  }
+
+  if (tournamentTypeInfo.finalType == "quals") {
+    console.log("СЮДА ЗАШЛИ!!");
+
+    const pilotsLeaderboard = [];
+
+    const qualsType = getState("tournamentQualsType");
+
+    const consecutivesCount = getState("consecutivesCount");
+
+    const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
+
+    const qualsSlotsFullInfo = qualSlots.map((slot) => {
+      if (duplicatedHeatsId?.includes(slot.heatId)) {
+        const duplicatedInfo = duplicatedHeatsData.filter((duplicatedHeat) => duplicatedHeat.heatId == slot.heatId);
+        const duplicatedIds = duplicatedInfo.map((dupl) => dupl.duplicateId);
+        const lastSlotInfo = allSlots.find((slot) => slot.heatId == duplicatedIds[duplicatedIds.length - 1]);
+        return { ...slot, pilots: lastSlotInfo.pilots, duplicateHeats: duplicatedIds };
+      } else {
+        return { ...slot, duplicateHeats: false };
+      }
+    });
+
+    const qualsFullInfo = qualsSlotsFullInfo.map((slotInfo) => {
+      // console.log("slotInfoslotInfo", slotInfo);
+
+      const diplicatedId = slotInfo.duplicateHeats ? slotInfo.duplicateHeats : [];
+      const heatIds = [+slotInfo.heatId, ...diplicatedId];
+
+      console.log("heatIds", heatIds);
+      console.log("rounds", rounds);
+
+      const roundsForHeat = rounds.filter((round) => heatIds.includes(+round.heatId));
+      console.log("roundsForHeat", roundsForHeat);
+
+      const pilotsInfo = slotInfo.pilots.map((pilotSlot) => {
+        const pilotRoundsInfo = roundsForHeat.map((roundInfo) => {
+          const roundResults = roundInfo.leaderboard.by_fastest_lap;
+          const pilotRoundResults = roundResults.find((pilotResults) => pilotResults.pilot_id == pilotSlot.id);
+
+          return pilotRoundResults;
+        });
+
+        const allRounds = Array.from({ length: 10 }, (_, index) => {
+          if (pilotRoundsInfo?.[index]) {
+            return pilotRoundsInfo[index];
+          } else {
+            return {};
+          }
+        });
+
+        const roundsInfo = allRounds.map((round) => {
+          if (round.laps) {
+            const timeString = round[qualsType];
+            const timeStamp = round[`${qualsType}_raw`];
+            const laps = qualsType == "consecutives" ? round.consecutives_base : 1;
+            const pilotId = round.pilot_id;
+            const pilotName = round.callsign;
+            const qualsLapsCount = qualsType == "consecutives" ? consecutivesCount : 1;
+
+            return { isRoundResults: true, timeString, timeStamp, laps, pilotId, pilotName, qualsType, qualsLapsCount };
+          } else {
+            return { isRoundResults: false };
+          }
+        });
+        return { ...pilotSlot, roundsInfo: roundsInfo };
+      });
+
+      return { ...slotInfo, pilots: pilotsInfo };
+    });
+
+    qualsFullInfo.forEach((slotInfo) => {
+      slotInfo.pilots.forEach((pilotInfo) => {
+        const pilotInfoObj = {};
+        pilotInfoObj.id = pilotInfo.id;
+        pilotInfoObj.name = pilotInfo.callsign;
+        pilotInfoObj.times = [];
+        const pilotResults = pilotInfo.roundsInfo.filter((info) => info.laps > 0);
+
+        pilotResults.forEach((results) => {
+          const timeString = results.timeString;
+          const timeStamp = results.timeStamp;
+          const laps = results.laps;
+
+          pilotInfoObj.times.push({ timeStamp, timeString, laps, qualsType });
+        });
+
+        if (pilotInfoObj.times.length > 0) {
+          pilotInfoObj.times.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
+
+          pilotInfoObj.bestTime = pilotInfoObj.times[0];
+
+          pilotsLeaderboard.push(pilotInfoObj);
+        }
+      });
+    });
+
+    const qualsFullInfoWithBest = qualsFullInfo.map((slotInfo) => {
+      slotInfo;
+    });
+
+    const sortedPilotsLeaderboard = pilotsLeaderboard.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
+
+    console.log("sortedPilotsLeaderboard", sortedPilotsLeaderboard);
+
+    qualsLeaderboard = sortedPilotsLeaderboard;
+    qualsInfo = qualsFullInfo;
+  }
 
   if (checkPauses) {
     getRacesPauses(allRaces);
@@ -113,17 +230,17 @@ function Tournament({ fullRHData, currentClass }) {
     getRacesTime(allRaces);
   }
 
-  console.log("heatsheats", heatsData);
-  console.log("roundsrounds", rounds);
-  console.log("races", races);
-  console.log("racesWithScore", racesWithScore);
-  console.log("ALLLLRACESSS", allRaces);
+  //   console.log("heatsheats", heatsData);
+  //   console.log("roundsrounds", rounds);
+  //   console.log("races", races);
+  //   console.log("racesWithScore", racesWithScore);
+  //   console.log("ALLLLRACESSS", allRaces);
 
-  const getButton = (e) => {
-    const currentId = e.target.id;
-    setActiveTabId(+currentId);
-    console.log("activeTabIdactiveTabId", e.target.id);
-  };
+  //   const getButton = (e) => {
+  //     const currentId = e.target.id;
+  //     setActiveTabId(+currentId);
+  //     console.log("activeTabIdactiveTabId", e.target.id);
+  //   };
 
   useEffect(() => {
     const handleUpdate = (value) => {
@@ -132,7 +249,6 @@ function Tournament({ fullRHData, currentClass }) {
     const raceClassUpdate = (value) => {
       setRaceClass(value);
     };
-    console.log("SUBSCRIBE");
 
     subscribe("fullRHData", handleUpdate);
     subscribe("currentClass", raceClassUpdate);
@@ -144,7 +260,6 @@ function Tournament({ fullRHData, currentClass }) {
     return () => {
       unsubscribe("fullRHData", handleUpdate);
       unsubscribe("currentClass", raceClassUpdate);
-      console.log("UNNNNNNNSUBSCRIBE");
     };
   }, []);
 
@@ -162,10 +277,12 @@ function Tournament({ fullRHData, currentClass }) {
         <div className="tournament__tittle">
           <h2 className="tournament__event-name">{fullData.eventName}</h2>
           <h3 className="tournament__final-name">{fullData.results.classes[raceClass].name}</h3>
-          <DirectionSwitcher />
+          {/* <DirectionSwitcher /> */}
         </div>
+        {tournamentTypeInfo.finalType == "double16" &&
+          (isMobile ? <VerticalTable channelsAndColors={channelsAndColors} raceData={raceInfo} /> : <HorizontalTable channelsAndColors={channelsAndColors} raceData={raceInfo} />)}
 
-        {isMobile ? <VerticalTable channelsAndColors={channelsAndColors} raceData={allRaces} /> : <HorizontalTable channelsAndColors={channelsAndColors} raceData={allRaces} />}
+        {tournamentTypeInfo.finalType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
       </div>
     </>
   );

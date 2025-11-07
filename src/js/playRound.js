@@ -3,7 +3,7 @@ import { modalOnOff, tabSwitch, roundStatsStrokeWidthChange, textChange } from "
 import { getRound } from "./getDatas";
 import { writeRound } from "./htmlWriters.jsx";
 import { lapTimeConverter } from "./utils";
-import { getState, addButton, setTab, getTab } from "./sharedStates";
+import { getState, addButton, setTab, getTab } from "./sharedStates.js";
 import { SPEED_NAMES, SPEED_VALUES } from "./consts";
 
 let lastHoleShot;

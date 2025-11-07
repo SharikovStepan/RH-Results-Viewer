@@ -1,4 +1,4 @@
-import { getState, getTab, setTab, getButton, setState, getDuel, setDuel, getAkcent, addButton } from "./sharedStates";
+import { getState, getTab, setTab, getButton, setState, getDuel, setDuel, getAkcent, addButton } from "./sharedStates.js";
 import { writeInRoundHTML, writeAllLapsHTML, writePilotsVs } from "./htmlWriters.jsx";
 import { tabSwitch, tabHeightChange, spoilerOnOff, modalOnOff, lapNodeShow, allLapsGraphScale, pilotsVsGraphScale, allLapsGraphChoosing, pilotsVsGraphChoosing, setAkcentValues } from "./uiChange";
 import { spoilerButtonAnimation, inRoundShow, allLapsShow, pilotsVsShow } from "./animations";

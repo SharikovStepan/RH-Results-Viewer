@@ -25,10 +25,11 @@ const states = {
   tournamentFinalRoundsQuantity: 5,
   tournamentRaceQuantity: 14,
   tournamentPilotsPerHeat: 4,
+  tournamentQualsType: "consecutives",
   finalTypesByClass: [],
   fullRHData: {},
   raceClassesWithFinals: [],
-  reactRoot:null,
+  reactRoot: null,
 };
 
 const subscribers = {};

@@ -92,7 +92,7 @@ async function refreshData(isTournament) {
   const repeatTmr = setTimeout(() => {
     checkLiveData();
     clearTimeout(repeatTmr);
-  }, 10000);
+  }, 6660);
 }
 
 

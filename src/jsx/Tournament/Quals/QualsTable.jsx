@@ -1,9 +1,10 @@
 import { p } from "motion/react-client";
 import ChannelAndColor from "../../ChannelAndColor";
+import React from "react";
 
 function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
-	console.log('qualsInfo',qualsInfo);
-	
+  console.log("qualsInfo", qualsInfo);
+
   return (
     <>
       <div className="quals">
@@ -14,8 +15,8 @@ function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
             const pilots = qualHeat.pilots;
             const pilotsQuantity = pilots?.length;
             return (
-              <>
-                <div key={heatName} className="quals__group">
+              <React.Fragment key={heatName}>
+                <div className="quals__group">
                   <div className="quals__tittles">
                     <div className="quals__heat-name">{heatName}</div>
                     <div className="quals__rounds-tittle">Раунды</div>
@@ -34,12 +35,10 @@ function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
                         const channelData = channelsAndColors.find((node) => node.nodeIndex == nodeIndex);
 
                         return (
-                          <>
-                            <div key={`${pilotName}-${pilotId}`} className="quals__pilot-name">
-                              <p>{pilotName}</p>
-                              {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
-                            </div>
-                          </>
+                          <div key={`${pilotName}-${pilotId}`} className="quals__pilot-name">
+                            <p>{pilotName}</p>
+                            {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
+                          </div>
                         );
                       })}
                     </div>
@@ -83,7 +82,7 @@ function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
                     </div>
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </div>

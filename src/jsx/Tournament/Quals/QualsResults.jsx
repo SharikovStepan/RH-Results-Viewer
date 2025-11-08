@@ -1,5 +1,13 @@
+import { div } from "motion/react-client";
+import { getStringGap } from "../utils";
+
 function QualsResults({ qualsLeaderboard }) {
   console.log("qualsLeaderboard qualsLeaderboard", qualsLeaderboard);
+
+  const topQuantity = 16;
+
+  const topPilots = qualsLeaderboard.slice(0, topQuantity);
+  const botPilots = qualsLeaderboard.slice(topQuantity);
 
   return (
     <>
@@ -11,83 +19,61 @@ function QualsResults({ qualsLeaderboard }) {
               <div className="quals-results__tittle-time">Время</div>
               <div className="quals-results__tittle-lead">Отставание</div>
             </div>
+
             <div className="quals-results__top-pilots">
-              <div className="quals-results__top-pilot">
-                <div className="quals-results__top-pilot-name">
-                  <p>1</p>
-                  <p>Кошка 1</p>
-                </div>
-                <div className="quals-results__top-pilot-time">0:22.192</div>
-                <div className="quals-results__top-pilot-gap">-:--.---</div>
-              </div>
-              <div className="quals-results__top-pilot">
-                <div className="quals-results__top-pilot-name">
-                  <p>2</p>
-                  <p>Кошка 2</p>
-                </div>
-                <div className="quals-results__top-pilot-time">0:22.192</div>
-                <div className="quals-results__top-pilot-gap">+0:01.120</div>
-              </div>
-              <div className="quals-results__top-pilot">
-                <div className="quals-results__top-pilot-name">
-                  <p>3</p>
-                  <p>Станкевич Алексей</p>
-                </div>
-                <div className="quals-results__top-pilot-time">0:22.192</div>
-                <div className="quals-results__top-pilot-gap">+0:01.120</div>
-              </div>
-              <div className="quals-results__top-pilot">
-                <div className="quals-results__top-pilot-name">
-                  <p>..</p>
-                  <p>Меньшиков Владислав</p>
-                </div>
-                <div className="quals-results__top-pilot-time"><p>2/</p>0:22.192</div>
-                <div className="quals-results__top-pilot-gap">+1 круг</div>
-              </div>
-              <div className="quals-results__top-pilot">
-                <div className="quals-results__top-pilot-name">
-                  <p>16</p>
-                  <p>Кошка 5</p>
-                </div>
-                <div className="quals-results__top-pilot-time"><p>3/</p>0:22.192</div>
-                <div className="quals-results__top-pilot-gap">+0:01.120</div>
-              </div>
+              {topPilots.map((pilot, index) => {
+                const place = index + 1;
+                const pilotName = pilot.name;
+                const pilotId = pilot.id;
+                const bestTimeStamp = pilot.bestTime.timeStamp;
+                const bestTimeString = pilot.bestTime.timeString;
+                const laps = pilot.bestTime.laps;
+                const qualsLapsCount = pilot.bestTime.qualsLapsCount;
+                const previousTimeStamp = index == 0 ? bestTimeStamp : topPilots[index - 1].bestTime.timeStamp;
+                const previousLaps = index == 0 ? laps : topPilots[index - 1].bestTime.laps;
+
+                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
+
+                return (
+                  <div key={`${pilotName}-${pilotId}`} className="quals-results__top-pilot">
+                    <div className="quals-results__top-pilot-name">
+                      <p>{place}</p>
+                      <p>{pilotName}</p>
+                    </div>
+                    <div className="quals-results__top-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
+                    <div className="quals-results__top-pilot-gap">{index == 0 ? "-" : gapTime}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
+
           <div className="quals-results__bot-container">
             <div className="quals-results__bot-pilots">
-              <div className="quals-results__bot-pilot">
-                <div className="quals-results__bot-pilot-name">
-                  <p>17</p>
-                  <p>CAT 7</p>
-                </div>
-                <div className="quals-results__bot-pilot-time">0:22.192</div>
-                <div className="quals-results__bot-pilot-gap">+0:01.120</div>
-              </div>
-              <div className="quals-results__bot-pilot">
-                <div className="quals-results__bot-pilot-name">
-                  <p>18</p>
-                  <p>CAT 7</p>
-                </div>
-                <div className="quals-results__bot-pilot-time">0:22.192</div>
-                <div className="quals-results__bot-pilot-gap">+0:01.120</div>
-              </div>
-              <div className="quals-results__bot-pilot">
-                <div className="quals-results__bot-pilot-name">
-                  <p>..</p>
-                  <p>CAT ?</p>
-                </div>
-                <div className="quals-results__bot-pilot-time"><p>3/</p>0:22.192</div>
-                <div className="quals-results__bot-pilot-gap">+0:01.120</div>
-              </div>
-              <div className="quals-results__bot-pilot">
-                <div className="quals-results__bot-pilot-name">
-                  <p>47</p>
-                  <p>Andre Adams</p>
-                </div>
-                <div className="quals-results__bot-pilot-time"><p>3/</p>0:22.192</div>
-                <div className="quals-results__bot-pilot-gap">+0:01.120</div>
-              </div>
+              {botPilots.map((pilot, index) => {
+                const place = topQuantity + index + 1;
+                const pilotName = pilot.name;
+                const pilotId = pilot.id;
+                const laps = pilot.bestTime.laps;
+                const qualsLapsCount = pilot.bestTime.qualsLapsCount;
+                const bestTimeStamp = pilot.bestTime.timeStamp;
+                const bestTimeString = pilot.bestTime.timeString;
+                const previousTimeStamp = index == 0 ? topPilots[topPilots.length - 1].bestTime.timeStamp : botPilots[index - 1].bestTime.timeStamp;
+                const previousLaps = index == 0 ? topPilots[topPilots.length - 1].bestTime.laps : botPilots[index - 1].bestTime.laps;
+
+                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
+
+                return (
+                  <div key={`${pilotName}-${pilotId}`} className="quals-results__bot-pilot">
+                    <div className="quals-results__bot-pilot-name">
+                      <p>{place}</p>
+                      <p>{pilotName}</p>
+                    </div>
+                    <div className="quals-results__bot-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
+                    <div className="quals-results__bot-pilot-gap">{gapTime}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

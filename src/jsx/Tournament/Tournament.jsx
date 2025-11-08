@@ -41,13 +41,9 @@ function Tournament({ fullRHData, currentClass }) {
   const duplicatedHeatsId = duplicatedHeatsData.map((heat) => heat.heatId);
   const duplicateIds = duplicatedHeatsData.map((heat) => heat.duplicateId);
 
-  console.log("duplicateIds", duplicatedHeatsData);
-
   const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
 
   const noResultsHeats = allSlots.filter((slot) => slot.isResults == false).filter((heat) => duplicateIds?.includes(heat.heatId) == false);
-
-  console.log("allSlotsallSlots", allSlots);
 
   const heatsNum = fullData.results["heats_by_class"][raceClass];
   const heatsNumSorted = [];
@@ -78,24 +74,50 @@ function Tournament({ fullRHData, currentClass }) {
     })
     .filter((heatData) => heatData.heat_id);
 
+  //Ломалось без явного указания heatId и heatName...
+  //   const roundsWithResultsOld = heatsData
+  //     .map((heat) => {
+  //       if (deletedRoundsInHeats.length > 0) {
+  //         const deletedRoundsInHeat = deletedRoundsInHeats.find((data) => data.heatId == heat.heat_id)?.deletedRoundNum || [];
+  //         const filteredRounds = heat.rounds.filter((round) => !deletedRoundsInHeat.includes(round.id));
+  //         return filteredRounds;
+  //       } else {
+  //         return heat.rounds;
+  //       }
+  //     })
+  //     .flat();
+
   //Здесь собираем все раунды
-  const rounds = heatsData
+  const roundsWithResults = heatsData
     .map((heat) => {
+      const heatId = heat.heat_id;
+      const heatName = heat.displayname;
+
       if (deletedRoundsInHeats.length > 0) {
-        const deletedRoundsInHeat = deletedRoundsInHeats.find((data) => data.heatId == heat.heat_id)?.deletedRoundNum || [];
-        const filteredRounds = heat.rounds.filter((round) => !deletedRoundsInHeat.includes(round.id));
+        const deletedRoundsInHeat = deletedRoundsInHeats.find((data) => data.heatId == heatId)?.deletedRoundNum || [];
+
+        const filteredRounds = heat.rounds
+          .filter((round) => !deletedRoundsInHeat.includes(round.id))
+          .map((round) => ({
+            ...round,
+            heatId,
+            heatName,
+          }));
+
         return filteredRounds;
       } else {
-        return heat.rounds;
+        return heat.rounds.map((round) => ({
+          ...round,
+          heatId,
+          heatName,
+        }));
       }
     })
     .flat();
 
-  console.log("rounds", rounds);
-
   if (tournamentTypeInfo.finalType == "double16") {
     //собираем массив всех выполненных гонок
-    const races = getResultRaces(rounds, allSlots);
+    const races = getResultRaces(roundsWithResults, allSlots);
 
     //Ставим баллы за дуэли, если они есть
     const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
@@ -117,8 +139,6 @@ function Tournament({ fullRHData, currentClass }) {
   }
 
   if (tournamentTypeInfo.finalType == "quals") {
-    console.log("СЮДА ЗАШЛИ!!");
-
     const pilotsLeaderboard = [];
 
     const qualsType = getState("tournamentQualsType");
@@ -144,14 +164,17 @@ function Tournament({ fullRHData, currentClass }) {
       const diplicatedId = slotInfo.duplicateHeats ? slotInfo.duplicateHeats : [];
       const heatIds = [+slotInfo.heatId, ...diplicatedId];
 
-      console.log("heatIds", heatIds);
-      console.log("rounds", rounds);
+      // const roundsForGroupOld = roundsWithResults.filter((round) => {
+      //   console.log("round in OLD", round);
+      //   console.log("+round.heatId OLD", +round.heatId);
 
-      const roundsForHeat = rounds.filter((round) => heatIds.includes(+round.heatId));
-      console.log("roundsForHeat", roundsForHeat);
+      //   return heatIds.includes(+round.heatId);
+      // });
+
+      const roundsForGroup = roundsWithResults.filter((round) => heatIds.includes(+round.heatId));
 
       const pilotsInfo = slotInfo.pilots.map((pilotSlot) => {
-        const pilotRoundsInfo = roundsForHeat.map((roundInfo) => {
+        const pilotRoundsInfo = roundsForGroup.map((roundInfo) => {
           const roundResults = roundInfo.leaderboard.by_fastest_lap;
           const pilotRoundResults = roundResults.find((pilotResults) => pilotResults.pilot_id == pilotSlot.id);
 
@@ -198,10 +221,13 @@ function Tournament({ fullRHData, currentClass }) {
           const timeString = results.timeString;
           const timeStamp = results.timeStamp;
           const laps = results.laps;
+          const qualsLapsCount = results.qualsLapsCount;
 
-          pilotInfoObj.times.push({ timeStamp, timeString, laps, qualsType });
+          pilotInfoObj.times.push({ timeStamp, timeString, laps, qualsType, qualsLapsCount });
         });
 
+
+		  
         if (pilotInfoObj.times.length > 0) {
           pilotInfoObj.times.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
 
@@ -212,9 +238,29 @@ function Tournament({ fullRHData, currentClass }) {
       });
     });
 
-    const qualsFullInfoWithBest = qualsFullInfo.map((slotInfo) => {
-      slotInfo;
-    });
+    const pilotsLeaderboardFiltered = pilotsLeaderboard.reduce((acc, pilot, index) => {
+      console.log("acc", acc);
+      console.log("pilot", pilot);
+      const prevIds = acc.map((pilot) => pilot.id);
+
+      const isRepeatId = prevIds.includes(pilot.id);
+
+      if (isRepeatId) {
+        const prevpilotInfo = acc.find((prevPilot) => prevPilot.id == pilot.id);
+        const newRounds = pilot.rounds;
+
+        console.log("prevpilotInfo", prevpilotInfo);
+        console.log("newRounds", newRounds);
+      }
+
+      console.log("isRepeatId", isRepeatId);
+
+      console.log("prevId", prevIds);
+
+      return [...acc, pilot];
+    }, []);
+
+    console.log("pilotsLeaderboardFiltered", pilotsLeaderboardFiltered);
 
     const sortedPilotsLeaderboard = pilotsLeaderboard.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
 

@@ -428,3 +428,15 @@ export function getTimeDiff(time1, time2) {
 
   return formatted;
 }
+
+export const getStringGap = (timeStamp, previousTimeStamp) => {
+  const gapTimeStamp = timeStamp - previousTimeStamp;
+  const formatted = gapTimeStamp / 1000;
+  const fixed = formatted.toFixed(3);
+
+  const minutes = Math.floor(fixed / 60);
+  const secconds = Math.floor(fixed % 60);
+  const milliseconds = Math.floor((fixed % 1) * 1000);
+
+  return `+${minutes}:${String(secconds).padStart(2, "0")}.${String(milliseconds).padStart(3, "0")}`;
+};

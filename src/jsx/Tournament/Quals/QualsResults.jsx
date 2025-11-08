@@ -1,9 +1,7 @@
-import { div } from "motion/react-client";
+import { motion } from "motion/react";
 import { getStringGap } from "../utils";
 
-function QualsResults({ qualsLeaderboard }) {
-  console.log("qualsLeaderboard qualsLeaderboard", qualsLeaderboard);
-
+function QualsResults({ qualsLeaderboard, activePilotId }) {
   const topQuantity = 16;
 
   const topPilots = qualsLeaderboard.slice(0, topQuantity);
@@ -35,14 +33,20 @@ function QualsResults({ qualsLeaderboard }) {
                 const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
 
                 return (
-                  <div key={`${pilotName}-${pilotId}`} className="quals-results__top-pilot">
+                  <motion.div
+                    layout
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    key={`${pilotName}-${pilotId}`}
+                    className={`quals-results__top-pilot ${activePilotId == pilotId ? "_active" : ""}`}>
                     <div className="quals-results__top-pilot-name">
                       <p>{place}</p>
                       <p>{pilotName}</p>
                     </div>
                     <div className="quals-results__top-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
                     <div className="quals-results__top-pilot-gap">{index == 0 ? "-" : gapTime}</div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -64,14 +68,20 @@ function QualsResults({ qualsLeaderboard }) {
                 const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
 
                 return (
-                  <div key={`${pilotName}-${pilotId}`} className="quals-results__bot-pilot">
+                  <motion.div
+                    layout
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    key={`${pilotName}-${pilotId}`}
+                    className="quals-results__bot-pilot">
                     <div className="quals-results__bot-pilot-name">
                       <p>{place}</p>
                       <p>{pilotName}</p>
                     </div>
                     <div className="quals-results__bot-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
                     <div className="quals-results__bot-pilot-gap">{gapTime}</div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

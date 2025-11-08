@@ -1,4 +1,4 @@
-import { motion, LayoutGroup } from "motion/react";
+import { motion } from "motion/react";
 import { DOUBLE_ELIM_GRIDS } from "./const";
 import ChannelAndColor from "../ChannelAndColor";
 function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilot, doubleElimLows, activeRaces, pilotsQuantity }) {

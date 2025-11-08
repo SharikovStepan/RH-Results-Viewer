@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
+
 import QualsResults from "./QualsResults";
 import QualsTable from "./QualsTable";
 
 function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
-
+  const [activePilotId, setActivePilotId] = useState(null);
   const getUrlParams = () => {
     return new URLSearchParams(window.location.search);
   };
 
   useEffect(() => {
     const params = getUrlParams();
-    const tabFromUrl = params.get("quals") || "quals"
+    const tabFromUrl = params.get("quals") || "quals";
     setActiveTab(tabFromUrl);
   }, []);
 
@@ -26,6 +27,17 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
     window.history.pushState({}, "", newUrl);
   };
 
+  const getPilotId = (e) => {
+    const id = e.target.closest(".quals__pilot-name ").getAttribute("pilot-id");
+    console.log("iD ", id);
+
+    if (id == activePilotId) {
+      setActivePilotId(null);
+    } else {
+      setActivePilotId(id);
+    }
+  };
+
   return (
     <>
       <div className="quals__buttons _buttons-wrapper">
@@ -36,9 +48,8 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
           Результаты
         </button>
       </div>
-
-      {activeTab == "quals" && <QualsTable channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} />}
-      {activeTab == "qualsResults" && <QualsResults qualsLeaderboard={qualsLeaderboard} />}
+      {activeTab == "quals" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId} channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} />}
+      {activeTab == "qualsResults" && <QualsResults activePilotId={activePilotId} qualsLeaderboard={qualsLeaderboard} />}
     </>
   );
 }

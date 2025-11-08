@@ -5354,7 +5354,7 @@ body {
 
 	&__race-sub-tittles {
 		display: grid;
-		grid-template-columns: 1.2fr 1fr 0.5fr;
+		grid-template-columns: 1.6fr 1fr 0.35fr;
 		align-items: end;
 		justify-items: center;
 		margin: 0px 0px 5px 0px;
@@ -5443,6 +5443,7 @@ body {
 	&__pilot-rounds {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
+		overflow: auto;
 	}
 
 
@@ -5458,6 +5459,10 @@ body {
 		cursor: pointer;
 		border-radius: 6px;
 		transition: all 0.3s ease;
+
+		min-width: 15px;
+		// overflow: hidden;
+
 
 		&._no-event {
 			pointer-events: none;
@@ -5574,6 +5579,10 @@ body {
 		justify-content: center;
 		align-items: center;
 		justify-content: center;
+
+		overflow: hidden;
+		// text-overflow: ellipsis;
+
 		box-shadow: 0px 0px 5px $color-akcent2 inset, 0px 0px 2px $color-akcent2;
 	}
 }
@@ -5737,6 +5746,13 @@ body {
 		grid-template-columns: 1fr auto;
 		align-items: center;
 		padding: 0px 10px;
+		cursor: pointer;
+		transition: box-shadow 0.2s ease;
+
+		&._active {
+			border: 1px solid $color-akcent1Vs;
+			box-shadow: 0px 0px 10px $color-akcent1Vs inset;
+		}
 
 		p {
 			min-width: 0;
@@ -5950,6 +5966,9 @@ body {
 		align-items: center;
 		min-height: 40px;
 
+		&._active {
+			box-shadow: 0px 0px 10px $color-akcent1Vs inset;
+		}
 
 		&:not(:last-child):before {
 			content: '';

@@ -1,9 +1,10 @@
-import { p } from "motion/react-client";
 import ChannelAndColor from "../../ChannelAndColor";
 import React from "react";
 
-function QualsTable({ channelsAndColors, qualsInfo }) {
-  console.log("qualsInfo", qualsInfo);
+function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId }) {
+  const handleClsick = (e) => {
+    getPilotId(e);
+  };
 
   return (
     <>
@@ -35,7 +36,7 @@ function QualsTable({ channelsAndColors, qualsInfo }) {
                         const channelData = channelsAndColors.find((node) => node.nodeIndex == nodeIndex);
 
                         return (
-                          <div key={`${pilotName}-${pilotId}`} className="quals__pilot-name">
+                          <div pilot-id={pilotId} onClick={handleClsick} key={`${pilotName}-${pilotId}`} className={`quals__pilot-name ${activePilotId == pilotId ? "_active" : ""}`}>
                             <p>{pilotName}</p>
                             {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
                           </div>
@@ -58,12 +59,12 @@ function QualsTable({ channelsAndColors, qualsInfo }) {
                                 const laps = roundInfo.laps;
                                 const bestTime = pilot.bestTime.timeStamp;
                                 const isBestTime = timeStamp == bestTime;
-
+                                const isFirstQual = pilotRounds.filter((round) => round.isRoundResults).length <= 1;
                                 const timeResult = laps == qualsLaps ? timeString : `${laps}/${timeString}`;
                                 return (
                                   <div
                                     key={`pilot-${pilotId}-time-${index}`}
-                                    className={`quals__pilot-time pilot-1-time-1 ${isBestTime ? "_best-quals-time" : ""} ${laps != qualsLaps ? `_bad-qual-time` : ""}`}>
+                                    className={`quals__pilot-time pilot-1-time-1 ${isBestTime && !isFirstQual ? "_best-quals-time" : ""} ${laps != qualsLaps ? `_bad-qual-time` : ""}`}>
                                     <p>{timeResult}</p>
                                   </div>
                                 );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, LayoutGroup } from "motion/react";
 
 import { getState, getTab, subscribe, unsubscribe } from "../../js/sharedStates";
 import HorizontalTable from "./HorizontalTable";
@@ -7,7 +8,6 @@ import DirectionSwitcher from "./DirectionSwitcher";
 import { getResultRaces, setDuelPlaces, setRaceScores, setRaceStatus, getPlannedRaces, addEmptyRaces, getChannelsAndColors, getRoundsPauses, getRacesPauses, getRacesTime } from "./utils";
 import { tabSwitch } from "../../js/uiChange";
 import { getParamTabIndex } from "../../js/utils";
-import { div } from "motion/react-client";
 import VerticalTable from "./VerticalTable";
 import { COLORS } from "./const";
 import Quals from "./Quals/Quals";
@@ -195,6 +195,7 @@ function Tournament({ fullRHData, currentClass }) {
             const pilotId = round.pilot_id;
             const pilotName = round.callsign;
             const qualsLapsCount = qualsType == "consecutives" ? consecutivesCount : 1;
+            console.log("consecutivesCount", consecutivesCount);
 
             return { isRoundResults: true, timeString, timeStamp, laps, pilotId, pilotName, qualsType, qualsLapsCount };
           } else {
@@ -239,12 +240,9 @@ function Tournament({ fullRHData, currentClass }) {
     });
 
     const pilotsLeaderboardFiltered = pilotsLeaderboard.reduce((acc, pilot, index) => {
-      console.log("acc", acc);
-      console.log("pilot", pilot);
       const prevIds = acc.map((pilot) => pilot.id);
 
       const isRepeatId = prevIds.includes(pilot.id);
-      console.log("isRepeatId", isRepeatId);
 
       if (isRepeatId) {
         const prevpilotInfo = acc.find((prevPilot) => prevPilot.id == pilot.id);
@@ -262,9 +260,6 @@ function Tournament({ fullRHData, currentClass }) {
         return [...acc, pilot];
       }
     }, []);
-    console.log("pilotsLeaderboard", pilotsLeaderboard);
-
-    console.log("pilotsLeaderboardFiltered", pilotsLeaderboardFiltered);
 
     const sortedPilotsLeaderboard = pilotsLeaderboardFiltered.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
 

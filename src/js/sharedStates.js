@@ -1,6 +1,6 @@
 const states = {
   mainObj: {},
-  consecutivesCount: 3,
+  consecutivesCount: 2,
   currentClass: 1,
   allRaceClassesId: [],
   language: "ru",

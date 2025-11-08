@@ -21,7 +21,8 @@ function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
   }, [raceData]);
 
   const choosePilot = (e) => {
-    const id = e.target.getAttribute("pilot-id");
+    const id = e.target.closest(".tournament__pilot-name").getAttribute("pilot-id");
+
     if (id == activePilotId) {
       setActivePilotId(null);
     } else {

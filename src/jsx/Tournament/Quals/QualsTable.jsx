@@ -2,7 +2,7 @@ import { p } from "motion/react-client";
 import ChannelAndColor from "../../ChannelAndColor";
 import React from "react";
 
-function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
+function QualsTable({ channelsAndColors, qualsInfo }) {
   console.log("qualsInfo", qualsInfo);
 
   return (
@@ -56,9 +56,8 @@ function QualsTable({ channelsAndColors, qualsInfo, qualsLeaderboard }) {
                                 const timeString = roundInfo.timeString;
                                 const qualsLaps = roundInfo.qualsLapsCount;
                                 const laps = roundInfo.laps;
-                                const pilotLeaderboardInfo = qualsLeaderboard.find((pilot) => pilot.id == pilotId);
-
-                                const isBestTime = timeStamp == pilotLeaderboardInfo.bestTime.timeStamp;
+                                const bestTime = pilot.bestTime.timeStamp;
+                                const isBestTime = timeStamp == bestTime;
 
                                 const timeResult = laps == qualsLaps ? timeString : `${laps}/${timeString}`;
                                 return (

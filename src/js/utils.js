@@ -257,7 +257,7 @@ export function arraysEqual(arr1, arr2) {
 }
 
 export function updateUrl(key, value, replace = false) {
-  const order = ["uuid", "raceclass", "main", "leaderboard"];
+  const order = ["uuid", "raceclass", "main", "leaderboard", "quals"];
 
   const url = new URL(window.location);
   const uuidParam = url.searchParams.get("uuid");
@@ -265,6 +265,7 @@ export function updateUrl(key, value, replace = false) {
   const classRaceParam = url.searchParams.get("raceclass");
   const mainTabParam = url.searchParams.get("main");
   const leaderboardTypeParam = url.searchParams.get("leaderboard");
+  const qualsTypeParams = url.searchParams.get("quals");
 
   const searchParams = new URLSearchParams();
   searchParams.set("uuid", uuidParam);
@@ -272,6 +273,8 @@ export function updateUrl(key, value, replace = false) {
   classRaceParam && searchParams.set("raceclass", classRaceParam);
   mainTabParam && searchParams.set("main", mainTabParam);
   leaderboardTypeParam && searchParams.set("leaderboard", leaderboardTypeParam);
+  qualsTypeParams && searchParams.set("quals", qualsTypeParams);
+
   //   if (!leaderboardTypeParam) {
   //     const leaderboardTypeTab = getTab("leaderboard")?.find((tab) => tab.opened == true);
   //     searchParams.set("leaderboard", leaderboardTypeTab?.name || "lap");
@@ -306,92 +309,91 @@ export function getParamTabIndex(paramName) {
   }
 }
 
-
 export function timeDiff2(time1, time2, extraMinutes = 0, extraSeconds = 0) {
-	// функция преобразует строку "HH:mm:ss.SSS" в миллисекунды
-	function parseTime(str) {
-	  const [h, m, rest] = str.split(":");
-	  const [s, ms] = rest.split(".");
-	  return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
-	}
- 
-	let diff = Math.abs(parseTime(time1) + extraMinutes * 60 * 1000 + extraSeconds * 1000 - parseTime(time2));
- 
-	// добавляем дополнительные минуты/секунды
-	diff -= extraMinutes * 60 * 1000 - extraSeconds * 1000;
- 
-	// преобразуем обратно в читаемый формат
-	const hours = Math.floor(diff / (3600 * 1000));
-	diff %= 3600 * 1000;
- 
-	const minutes = Math.floor(diff / (60 * 1000));
-	diff %= 60 * 1000;
- 
-	const seconds = Math.floor(diff / 1000);
-	const millis = diff % 1000;
- 
-	// собираем строку с ведущими нулями
-	return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
- }
- 
- export function timeDiff(time1, time2, extraMinutes = 0, extraSeconds = 0) {
-	// Преобразуем "HH:mm:ss.SSS" в миллисекунды
-	function parseTime(str) {
-	  const [h, m, rest] = str.split(":");
-	  const [s, ms] = rest.split(".");
-	  return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
-	}
- 
-	// Преобразуем миллисекунды обратно в "HH:mm:ss.SSS"
-	function formatTime(ms) {
-	  ms = Math.round(ms); // округляем миллисекунды
- 
-	  const hours = Math.floor(ms / (3600 * 1000));
-	  ms %= 3600 * 1000;
- 
-	  const minutes = Math.floor(ms / (60 * 1000));
-	  ms %= 60 * 1000;
- 
-	  const seconds = Math.floor(ms / 1000);
-	  const millis = ms % 1000;
- 
-	  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
-	}
- 
-	let t1Ms = parseTime(time1);
-	let t2Ms = parseTime(time2);
- 
-	// добавляем extraMinutes и extraSeconds только к первому времени
-	t1Ms += extraMinutes * 60 * 1000 + extraSeconds * 1000;
- 
-	const diffMs = Math.abs(t1Ms - t2Ms);
- 
-	return formatTime(diffMs);
- }
- 
- export function averageTime(times) {
-	function parseTime(str) {
-	  const [h, m, rest] = str.split(":");
-	  const [s, ms] = rest.split(".");
-	  return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
-	}
- 
-	function formatTime(ms) {
-	  ms = Math.round(ms);
-	  const hours = Math.floor(ms / (3600 * 1000));
-	  ms %= 3600 * 1000;
- 
-	  const minutes = Math.floor(ms / (60 * 1000));
-	  ms %= 60 * 1000;
- 
-	  const seconds = Math.floor(ms / 1000);
-	  const millis = ms % 1000;
- 
-	  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
-	}
- 
-	const totalMs = times.reduce((sum, t) => sum + parseTime(t), 0);
-	const avgMs = totalMs / times.length;
- 
-	return formatTime(avgMs);
- }
+  // функция преобразует строку "HH:mm:ss.SSS" в миллисекунды
+  function parseTime(str) {
+    const [h, m, rest] = str.split(":");
+    const [s, ms] = rest.split(".");
+    return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
+  }
+
+  let diff = Math.abs(parseTime(time1) + extraMinutes * 60 * 1000 + extraSeconds * 1000 - parseTime(time2));
+
+  // добавляем дополнительные минуты/секунды
+  diff -= extraMinutes * 60 * 1000 - extraSeconds * 1000;
+
+  // преобразуем обратно в читаемый формат
+  const hours = Math.floor(diff / (3600 * 1000));
+  diff %= 3600 * 1000;
+
+  const minutes = Math.floor(diff / (60 * 1000));
+  diff %= 60 * 1000;
+
+  const seconds = Math.floor(diff / 1000);
+  const millis = diff % 1000;
+
+  // собираем строку с ведущими нулями
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
+}
+
+export function timeDiff(time1, time2, extraMinutes = 0, extraSeconds = 0) {
+  // Преобразуем "HH:mm:ss.SSS" в миллисекунды
+  function parseTime(str) {
+    const [h, m, rest] = str.split(":");
+    const [s, ms] = rest.split(".");
+    return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
+  }
+
+  // Преобразуем миллисекунды обратно в "HH:mm:ss.SSS"
+  function formatTime(ms) {
+    ms = Math.round(ms); // округляем миллисекунды
+
+    const hours = Math.floor(ms / (3600 * 1000));
+    ms %= 3600 * 1000;
+
+    const minutes = Math.floor(ms / (60 * 1000));
+    ms %= 60 * 1000;
+
+    const seconds = Math.floor(ms / 1000);
+    const millis = ms % 1000;
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
+  }
+
+  let t1Ms = parseTime(time1);
+  let t2Ms = parseTime(time2);
+
+  // добавляем extraMinutes и extraSeconds только к первому времени
+  t1Ms += extraMinutes * 60 * 1000 + extraSeconds * 1000;
+
+  const diffMs = Math.abs(t1Ms - t2Ms);
+
+  return formatTime(diffMs);
+}
+
+export function averageTime(times) {
+  function parseTime(str) {
+    const [h, m, rest] = str.split(":");
+    const [s, ms] = rest.split(".");
+    return parseInt(h) * 3600 * 1000 + parseInt(m) * 60 * 1000 + parseInt(s) * 1000 + (ms ? parseInt(ms) : 0);
+  }
+
+  function formatTime(ms) {
+    ms = Math.round(ms);
+    const hours = Math.floor(ms / (3600 * 1000));
+    ms %= 3600 * 1000;
+
+    const minutes = Math.floor(ms / (60 * 1000));
+    ms %= 60 * 1000;
+
+    const seconds = Math.floor(ms / 1000);
+    const millis = ms % 1000;
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(millis).padStart(3, "0")}`;
+  }
+
+  const totalMs = times.reduce((sum, t) => sum + parseTime(t), 0);
+  const avgMs = totalMs / times.length;
+
+  return formatTime(avgMs);
+}

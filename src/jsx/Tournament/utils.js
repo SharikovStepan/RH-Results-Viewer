@@ -136,7 +136,7 @@ export const setDuelPlaces = (races, raceQuantity, roundsQuantity, finalRoundsQu
   return raceWithDuels;
 };
 
-export const setRaceScores = (races) => {
+export const setRaceScoresOld = (races) => {
   const racesWithScore = races.map((race) => {
     let pilotsRaceScores = [];
     const pilotsId = race.pilotsId;
@@ -160,6 +160,41 @@ export const setRaceScores = (races) => {
         if (scoreB === 0) return -1;
 
         return scoreA - scoreB;
+      })
+      .map((scoreData, index) => {
+        const place = scoreData.id ? index + 1 : null;
+        return { ...scoreData, place: place };
+      });
+    return { ...race, pilotsRacePlaces };
+  });
+
+  return racesWithScore;
+};
+
+export const setRaceScores = (races, pilotsQuatity) => {
+  const racesWithScore = races.map((race) => {
+    let pilotsRaceScores = [];
+    const pilotsId = race.pilotsId;
+    const raceTimes = race.pilotsRoundPlaces;
+    pilotsId.forEach((pilotId) => {
+      const pilotRacePlace = { id: pilotId, score: 0 };
+      raceTimes.forEach((roundData) => {
+        const pilotRoundData = roundData.filter((time) => time.id == pilotId);
+        pilotRacePlace.score += pilotId ? pilotsQuatity - pilotRoundData[0].place : 0;
+      });
+      pilotsRaceScores.push(pilotRacePlace);
+    });
+
+    const pilotsRacePlaces = pilotsRaceScores
+      .sort((a, b) => {
+        const scoreA = Number(a.score);
+        const scoreB = Number(b.score);
+
+        if (scoreA === 0 && scoreB === 0) return 0;
+        if (scoreA === 0) return 1;
+        if (scoreB === 0) return -1;
+
+        return scoreB - scoreA;
       })
       .map((scoreData, index) => {
         const place = scoreData.id ? index + 1 : null;

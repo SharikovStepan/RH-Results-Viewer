@@ -123,7 +123,7 @@ function Tournament({ fullRHData, currentClass }) {
     const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
 
     //Здесь счет каждой гонки, уже не раунда
-    const racesWithScore = setRaceScores(raceWithDuels);
+    const racesWithScore = setRaceScores(raceWithDuels, pilotsPerHeat);
 
     //ставим статус complete и проверяем последнюю гонку, complete она или нет
     const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity);

@@ -47,8 +47,8 @@ export async function startFileView(fileType) {
       { name: "leaderboard", opened: false, element: document.querySelector(".leaderboard") },
       { name: "rounds", opened: false, element: document.querySelector(".rounds") },
     ]);
-   //  const isTournament = getState("raceClassesWithFinals")?.includes(+getState("currentClass")) ? true : false;
-	 const isTournament = true
+    const isTournament = getState("raceClassesWithFinals")?.includes(+getState("currentClass")) ? true : false;
+    //  const isTournament = true
 
     tournamentRender(isTournament, false, fileType);
 

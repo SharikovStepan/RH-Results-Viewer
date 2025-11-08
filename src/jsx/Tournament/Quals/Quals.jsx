@@ -11,7 +11,7 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
 
   useEffect(() => {
     const params = getUrlParams();
-    const tabFromUrl = params.get("quals") || "quals"; // значение по умолчанию
+    const tabFromUrl = params.get("quals") || "quals"
     setActiveTab(tabFromUrl);
   }, []);
 

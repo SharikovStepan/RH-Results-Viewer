@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import RaceCard from "./RaceCard";
 import { DOUBLE_ELIM_GRIDS } from "./const";
 
-import { getState } from "../../js/sharedStates";
+import { getState } from "../../../js/sharedStates";
 
-function VerticalTable({channelsAndColors, raceData, activePilot }) {
+function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
   const [activePilotId, setActivePilotId] = useState(null);
   const [activeRaces, setActiveRaces] = useState("");
 
@@ -21,7 +21,8 @@ function VerticalTable({channelsAndColors, raceData, activePilot }) {
   }, [raceData]);
 
   const choosePilot = (e) => {
-    const id = e.target.getAttribute("pilot-id");
+    const id = e.target.closest(".tournament__pilot-name").getAttribute("pilot-id");
+
     if (id == activePilotId) {
       setActivePilotId(null);
     } else {
@@ -31,7 +32,7 @@ function VerticalTable({channelsAndColors, raceData, activePilot }) {
 
   return (
     <>
-      <div className="tournament__vertical-table" >
+      <div className="tournament__full-table" style={{ gridTemplateRows: `repeat(24, minmax(${getState("tournamentPilotsPerHeat") * 8 + 2}px, auto)` }}>
         {raceData.map((race, index) => {
           return (
             <RaceCard
@@ -40,17 +41,17 @@ function VerticalTable({channelsAndColors, raceData, activePilot }) {
               pilotButton={choosePilot}
               activePilot={activePilotId}
               raceIndex={index}
-              gridPositionsData={DOUBLE_ELIM_GRIDS.vertical}
+              gridPositionsData={DOUBLE_ELIM_GRIDS.horizontal}
               doubleElimLows={DOUBLE_ELIM_GRIDS.lowTableRaces}
               activeRaces={activeRaces}
               pilotsQuantity={getState("tournamentPilotsPerHeat")}
-				  channelsAndColors={channelsAndColors}
+              channelsAndColors={channelsAndColors}
             />
           );
         })}
-        {/* <div className="tournament__low-strip"></div> */}
+        <div className="tournament__low-strip"></div>
       </div>
     </>
   );
 }
-export default VerticalTable;
+export default HorizontalTable;

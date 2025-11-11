@@ -531,6 +531,8 @@ body {
 			background: linear-gradient(to right, $color-dark-animation 0%, $color-dark-animation 30%, $color-akcent1 50%, $color-dark-animation 70%, $color-dark-animation 100%);
 			background-size: 200% 100%;
 			animation: no-files 2s linear 0s infinite normal forwards;
+			height: 200%;
+
 		}
 	}
 
@@ -5143,6 +5145,30 @@ body {
 .tournament {
 	width: 100%;
 
+	&__buttons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+
+		// height: 40px;
+		@media(max-width:510px) {
+			flex-direction: column;
+			gap: 10px;
+		}
+	}
+
+	&__button {
+		height: 40px;
+
+		@media(max-width:510px) {
+			font-size: 16px;
+			height: 30px;
+			width: 140px;
+		}
+	}
+
+
 	&__tittle {
 		position: relative;
 		display: grid;
@@ -5591,28 +5617,6 @@ body {
 .quals {
 	color: $color-grey;
 
-	&__buttons {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 20px;
-
-		// height: 40px;
-		@media(max-width:510px) {
-			flex-direction: column;
-			gap: 10px;
-		}
-	}
-
-	&__button {
-		height: 40px;
-
-		@media(max-width:510px) {
-			font-size: 16px;
-			height: 30px;
-			width: 140px;
-		}
-	}
 
 	&__container {
 		display: flex;

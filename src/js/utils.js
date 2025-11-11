@@ -257,7 +257,7 @@ export function arraysEqual(arr1, arr2) {
 }
 
 export function updateUrl(key, value, replace = false) {
-  const order = ["uuid", "raceclass", "main", "leaderboard", "quals"];
+  const order = ["uuid", "raceclass", "main", "leaderboard", "quals", "doubles16"];
 
   const url = new URL(window.location);
   const uuidParam = url.searchParams.get("uuid");
@@ -266,6 +266,7 @@ export function updateUrl(key, value, replace = false) {
   const mainTabParam = url.searchParams.get("main");
   const leaderboardTypeParam = url.searchParams.get("leaderboard");
   const qualsTypeParams = url.searchParams.get("quals");
+  const doubles16TypeParams = url.searchParams.get("doubles16");
 
   const searchParams = new URLSearchParams();
   searchParams.set("uuid", uuidParam);
@@ -274,6 +275,7 @@ export function updateUrl(key, value, replace = false) {
   mainTabParam && searchParams.set("main", mainTabParam);
   leaderboardTypeParam && searchParams.set("leaderboard", leaderboardTypeParam);
   qualsTypeParams && searchParams.set("quals", qualsTypeParams);
+  doubles16TypeParams && searchParams.set("doubles16", doubles16TypeParams);
 
   //   if (!leaderboardTypeParam) {
   //     const leaderboardTypeTab = getTab("leaderboard")?.find((tab) => tab.opened == true);

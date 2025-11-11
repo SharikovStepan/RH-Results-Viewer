@@ -1,0 +1,37 @@
+export const DOUBLE_ELIM_GRIDS = {
+  lowTableRaces: [5, 7, 9, 10, 12, 13],
+  horizontal: [
+    { raceId: 1, gridRow: "1/5", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 2, gridRow: "5/9", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 3, gridRow: "9/13", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 4, gridRow: "13/17", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 5, gridRow: "17/21", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 6, gridRow: "3/7", gridColumn: "2/3", racePhase: "1/8" },
+    { raceId: 7, gridRow: "21/25", gridColumn: "1/2", racePhase: "1/16" },
+    { raceId: 8, gridRow: "11/15", gridColumn: "2/3", racePhase: "1/8" },
+    { raceId: 9, gridRow: "17/21", gridColumn: "2/3", racePhase: "1/8" },
+    { raceId: 10, gridRow: "21/25", gridColumn: "2/3", racePhase: "1/8" },
+    { raceId: 11, gridRow: "7/11", gridColumn: "3/4", racePhase: "1/4" },
+    { raceId: 12, gridRow: "19/23", gridColumn: "3/4", racePhase: "1/4" },
+    { raceId: 13, gridRow: "18/24", gridColumn: "4/5", racePhase: "Полуфинал" },
+    { raceId: 14, gridRow: "6/12", gridColumn: "4/5", racePhase: "Финал" },
+  ],
+  vertical: [
+    { raceId: 1, gridRow: "1/2", gridColumn: "1/2" },
+    { raceId: 2, gridRow: "2/3", gridColumn: "1/2" },
+    { raceId: 3, gridRow: "3/4", gridColumn: "1/2" },
+    { raceId: 4, gridRow: "4/5", gridColumn: "1/2" },
+    { raceId: 5, gridRow: "5/6", gridColumn: "1/2" },
+    { raceId: 6, gridRow: "6/7", gridColumn: "1/2" },
+    { raceId: 7, gridRow: "7/8", gridColumn: "1/2" },
+    { raceId: 8, gridRow: "8/9", gridColumn: "1/2" },
+    { raceId: 9, gridRow: "9/10", gridColumn: "1/2" },
+    { raceId: 10, gridRow: "10/11", gridColumn: "1/2" },
+    { raceId: 11, gridRow: "11/12", gridColumn: "1/2" },
+    { raceId: 12, gridRow: "12/13", gridColumn: "1/2" },
+    { raceId: 13, gridRow: "13/14", gridColumn: "1/2" },
+    { raceId: 14, gridRow: "14/15", gridColumn: "1/2" },
+  ],
+};
+
+export const COLORS = ["#ff0000", "#004cff", "#ffee00", "#00ff08", "#ff0099", "#ff8400", "#9500ff", "#00fff7"];

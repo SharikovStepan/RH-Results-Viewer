@@ -4,8 +4,9 @@ import { DOUBLE_ELIM_GRIDS } from "./const";
 
 import { getState } from "../../../js/sharedStates";
 
-function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
-  const [activePilotId, setActivePilotId] = useState(null);
+function HorizontalTable({ channelsAndColors, raceData, getPilotId, activePilotId }) {
+  //   const [activePilotId, setActivePilotId] = useState(null);
+
   const [activeRaces, setActiveRaces] = useState("");
 
   const findStatus = (raceData) => {
@@ -20,15 +21,7 @@ function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
     findStatus(raceData);
   }, [raceData]);
 
-  const choosePilot = (e) => {
-    const id = e.target.closest(".tournament__pilot-name").getAttribute("pilot-id");
-
-    if (id == activePilotId) {
-      setActivePilotId(null);
-    } else {
-      setActivePilotId(id);
-    }
-  };
+  
 
   return (
     <>
@@ -38,8 +31,8 @@ function HorizontalTable({ channelsAndColors, raceData, activePilot }) {
             <RaceCard
               key={`race-${index}`}
               raceData={race}
-              pilotButton={choosePilot}
-              activePilot={activePilotId}
+              pilotButton={getPilotId}
+              activePilotId={activePilotId}
               raceIndex={index}
               gridPositionsData={DOUBLE_ELIM_GRIDS.horizontal}
               doubleElimLows={DOUBLE_ELIM_GRIDS.lowTableRaces}

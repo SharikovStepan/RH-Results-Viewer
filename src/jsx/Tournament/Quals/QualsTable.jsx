@@ -36,7 +36,7 @@ function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId })
                         const channelData = channelsAndColors.find((node) => node.nodeIndex == nodeIndex);
 
                         return (
-                          <div pilot-id={pilotId} onClick={handleClsick} key={`${pilotName}-${pilotId}`} className={`quals__pilot-name ${activePilotId == pilotId ? "_active" : ""}`}>
+                          <div pilot-id={pilotId} onClick={handleClsick} key={`${pilotName}-${pilotId}`} className={`quals__pilot-name _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
                             <p>{pilotName}</p>
                             {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
                           </div>

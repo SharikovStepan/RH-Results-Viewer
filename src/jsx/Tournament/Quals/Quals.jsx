@@ -28,7 +28,7 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
   };
 
   const getPilotId = (e) => {
-    const id = e.target.closest(".quals__pilot-name ").getAttribute("pilot-id");
+    const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id");
 
     if (id == activePilotId) {
       setActivePilotId(null);
@@ -48,7 +48,7 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
         </button>
       </div>
       {activeTab == "table" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId} channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} />}
-      {activeTab == "results" && <QualsResults activePilotId={activePilotId} qualsLeaderboard={qualsLeaderboard} />}
+      {activeTab == "results" && <QualsResults getPilotId={getPilotId} activePilotId={activePilotId} qualsLeaderboard={qualsLeaderboard} />}
     </>
   );
 }

@@ -35,3 +35,12 @@ export const DOUBLE_ELIM_GRIDS = {
 };
 
 export const COLORS = ["#ff0000", "#004cff", "#ffee00", "#00ff08", "#ff0099", "#ff8400", "#9500ff", "#00fff7"];
+
+export const PLACE_RACE_NUMS_OLD = [
+  { racePhase: "1/16", raceNums: [5, 7], placeText: "13-16", lastPlaceNum: 16 },
+  { racePhase: "1/8", raceNums: [9, 10], placeText: "9-12", lastPlaceNum: 12 },
+  { racePhase: "1/4", raceNums: [12], placeText: "7-8", lastPlaceNum: 8 },
+  { racePhase: "1/2", raceNums: [13], placeText: "5-6", lastPlaceNum: 6 },
+];
+
+export const PLACE_TABLE_RACES = [5, 7, 9, 10, 12, 13, 14];

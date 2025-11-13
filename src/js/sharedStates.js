@@ -19,7 +19,7 @@ const states = {
   lapsIdData: [],
   liveTimestamp: null,
   newLiveData: false,
-  checkLiveDataInterval: null,
+  checkLiveDataTimeout: null,
   isTournamentTab: false,
   tournamentRoundsQuantity: 3,
   tournamentFinalRoundsQuantity: 5,

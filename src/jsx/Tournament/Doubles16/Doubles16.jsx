@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Doubles16TableHorizontal from "./Doubles16TableHorizontal";
 import Doubles16TableVertical from "./Doubles16TableVertical";
+import Doubles16Results from "./Doubles16Results";
 
-function Doubles16({ raceData, qualsLeaderboard, channelsAndColors }) {
+function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState(null);
 
@@ -30,7 +31,7 @@ function Doubles16({ raceData, qualsLeaderboard, channelsAndColors }) {
   };
 
   const getPilotId = (e) => {
-    const id = e.target.closest(".doubles16__pilot-name ").getAttribute("pilot-id");
+    const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id")
 
     if (id == activePilotId) {
       setActivePilotId(null);
@@ -59,8 +60,12 @@ function Doubles16({ raceData, qualsLeaderboard, channelsAndColors }) {
       </div>
 
       {activeTab == "table" &&
-        (isMobile ? <Doubles16TableVertical channelsAndColors={channelsAndColors} raceData={raceData} /> : <Doubles16TableHorizontal channelsAndColors={channelsAndColors} raceData={raceData} />)}
-      {/* {activeTab == "results" && <Doubles16Results activePilotId={activePilotId} Doubles16Leaderboard={Doubles16Leaderboard} />} */}
+        (isMobile ? (
+          <Doubles16TableVertical activePilotId={activePilotId} channelsAndColors={channelsAndColors} raceData={raceData} getPilotId={getPilotId} />
+        ) : (
+          <Doubles16TableHorizontal activePilotId={activePilotId} channelsAndColors={channelsAndColors} raceData={raceData} getPilotId={getPilotId} />
+        ))}
+      {activeTab == "results" && <Doubles16Results activePilotId={activePilotId} qualsPlaces={qualsPlaces} raceData={raceData} getPilotId={getPilotId} />}
     </>
   );
 }

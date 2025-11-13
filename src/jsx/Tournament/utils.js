@@ -198,6 +198,7 @@ export const setRaceScores = (races, pilotsQuatity) => {
       })
       .map((scoreData, index) => {
         const place = scoreData.id ? index + 1 : null;
+
         return { ...scoreData, place: place };
       });
     return { ...race, pilotsRacePlaces };
@@ -246,6 +247,7 @@ export const setRaceStatus = (races, raceQuantity, roundsQuantity, finalRoundsQu
 };
 
 export const getPlannedRaces = (slots, roundsQuantity, pilotsPerHeat = 4) => {
+
   const plannedRaces = slots.map((heat, index) => {
     let pilots = heat.pilots;
 
@@ -304,6 +306,35 @@ export const addEmptyRaces = (allKnownRaces, raceQuantity, pilotsPerHeat = 4) =>
     });
   }
   return fullQuantityRaces;
+};
+
+export const addRaceNumbers = (raceData) => {
+  const numberedRaces = raceData.map((race, index) => {
+    return { ...race, raceNum: index + 1 };
+  });
+  return numberedRaces;
+};
+
+export const checkDeletedResults = (slot, deleteRoundsArr, results) => {
+  const heatIdToCheck = slot.heatId;
+  const modifiedHeat = deleteRoundsArr.find((data) => data.heatId == heatIdToCheck);
+  const deletedRoundNums = modifiedHeat?.deletedRoundNum || [];
+
+  const heatRoundsArr = results.heats[heatIdToCheck].rounds;
+
+  const notDeletedRounds = heatRoundsArr.filter((round) => !deletedRoundNums.includes(round.id));
+
+  if (notDeletedRounds.length == 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const checkGroupForEmpty = (slot, duplicatedHeatsId) => {
+  const slotHeatId = slot.heatId;
+  const isHasDuplicate = duplicatedHeatsId.includes(slotHeatId);
+  return isHasDuplicate;
 };
 
 // export const getChannel = (channelRawData, nodeIndex) => {

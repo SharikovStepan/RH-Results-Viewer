@@ -1,11 +1,15 @@
 import { motion } from "motion/react";
 import { getStringGap } from "../utils";
 
-function QualsResults({ qualsLeaderboard, activePilotId }) {
+function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
   const topQuantity = 16;
 
   const topPilots = qualsLeaderboard.slice(0, topQuantity);
   const botPilots = qualsLeaderboard.slice(topQuantity);
+
+  const handleClick = (e) => {
+    getPilotId(e);
+  };
 
   return (
     <>
@@ -39,7 +43,9 @@ function QualsResults({ qualsLeaderboard, activePilotId }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     key={`${pilotName}-${pilotId}`}
-                    className={`quals-results__top-pilot ${activePilotId == pilotId ? "_active" : ""}`}>
+                    onClick={handleClick}
+                    pilot-id={pilotId}
+                    className={`quals-results__top-pilot _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
                     <div className="quals-results__top-pilot-name">
                       <p>{place}</p>
                       <p>{pilotName}</p>
@@ -74,7 +80,9 @@ function QualsResults({ qualsLeaderboard, activePilotId }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     key={`${pilotName}-${pilotId}`}
-                    className="quals-results__bot-pilot">
+                    pilot-id={pilotId}
+                    onClick={handleClick}
+                    className={`quals-results__bot-pilot _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
                     <div className="quals-results__bot-pilot-name">
                       <p>{place}</p>
                       <p>{pilotName}</p>

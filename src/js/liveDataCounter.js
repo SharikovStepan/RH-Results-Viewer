@@ -15,33 +15,33 @@ export function tittleCounter(eventName) {
 }
 
 export function checkLiveData() {
-  setState(
-    "checkLiveDataInterval",
-    setInterval(async () => {
-      const newData = await getLiveData(getState("isUuid"));
-      console.log("CHECK DATA");
+  clearTimeout(getState("checkLiveDataTimeout"));
 
-      if (getState("liveTimestamp") != newData.lastUpdate && getState("newLiveData") == false) {
-        setState("newLiveData", true);
+  const timeout = setTimeout(async () => {
+    const newData = await getLiveData(getState("isUuid"));
+    console.log("CHECK DATA");
+
+    if (getState("liveTimestamp") != newData.lastUpdate && getState("newLiveData") == false) {
+      setState("newLiveData", true);
+    }
+    if (getState("newLiveData")) {
+      const tournamentTab = document.getElementById("tournamentTab");
+      const isTournamentTabOpened = tournamentTab?.classList.contains("_active");
+
+      if (!isTournamentTabOpened) {
+        const updateLiveDataButton = newLiveDataHTML();
+        document.querySelector(".main").prepend(updateLiveDataButton);
+        updateLiveDataButton.addEventListener("click", () => refreshData(false), { once: true });
+      } else {
+        refreshData(true);
       }
-      if (getState("newLiveData")) {
-        const tournamentTab = document.getElementById("tournamentTab");
-        const isTournamentTabOpened = tournamentTab?.classList.contains("_active");
+      console.log("ТАЙМЕР");
+    } else {
+      checkLiveData();
+    }
+  }, 6660);
 
-        if (!isTournamentTabOpened) {
-          const updateLiveDataButton = newLiveDataHTML();
-          document.querySelector(".main").prepend(updateLiveDataButton);
-          updateLiveDataButton.addEventListener("click", () => refreshData(false), { once: true });
-        } else {
-          refreshData(true);
-        }
-
-        //очищаем таймер, как только newLiveData true
-        clearInterval(getState("checkLiveDataInterval"));
-        console.log("ТАЙМЕР");
-      }
-    }, 10000)
-  );
+  setState("checkLiveDataTimeout", timeout);
 }
 
 async function refreshData(isTournament) {
@@ -89,14 +89,9 @@ async function refreshData(isTournament) {
 
   //удаляем кнопку и включаем функцию ещё раз
   updateButton?.remove();
-  const repeatTmr = setTimeout(() => {
-    checkLiveData();
-    clearTimeout(repeatTmr);
-  }, 6660);
+  
+  checkLiveData();
 }
-
-
-
 
 // updateLiveDataButton.classList.add("_no-event");
 

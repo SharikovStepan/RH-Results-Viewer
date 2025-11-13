@@ -1,9 +1,10 @@
 import { motion } from "motion/react";
 import { DOUBLE_ELIM_GRIDS } from "./const";
 import ChannelAndColor from "../../ChannelAndColor";
-function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilot, doubleElimLows, activeRaces, pilotsQuantity }) {
+function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilotId, doubleElimLows, activeRaces, pilotsQuantity }) {
   const [isCurrentRace, isCompleteRace, isNextRace] = activeRaces || [];
 
+  const raceNum = raceData.raceNum;
   const raceStatus = raceData.status;
   const losersNums = Array.from({ length: pilotsQuantity / 2 }, (_, index) => pilotsQuantity - 1 - index);
 
@@ -45,7 +46,7 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
                 <div
                   pilot-id={pilotData.id}
                   onClick={pilotButton}
-                  className={`tournament__pilot-name _name-item _race-item ${activePilot == pilotData.id ? "_active" : ""} ${losersNums.includes(index) ? "loser" : ""}`}>
+                  className={`tournament__pilot-name _name-item _race-item _pilot-button ${+activePilotId == +pilotData.id ? "_active" : ""} ${losersNums.includes(index) && raceNum != 14 ? "loser" : ""}`}>
                   <p>{pilotPlace}</p>
                   <p>{pilotName}</p>
                   {channelData && <ChannelAndColor channel={channelData.channel} color={channelData.color} />}

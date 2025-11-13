@@ -2,7 +2,21 @@ import React, { useState, useEffect } from "react";
 
 import { getState, getTab, subscribe, unsubscribe } from "../../js/sharedStates";
 
-import { getResultRaces, setDuelPlaces, setRaceScores, setRaceStatus, getPlannedRaces, addEmptyRaces, getChannelsAndColors, getRoundsPauses, getRacesPauses, getRacesTime } from "./utils";
+import {
+  getResultRaces,
+  setDuelPlaces,
+  setRaceScores,
+  setRaceStatus,
+  getPlannedRaces,
+  addEmptyRaces,
+  getChannelsAndColors,
+  getRoundsPauses,
+  getRacesPauses,
+  getRacesTime,
+  addRaceNumbers,
+  checkDeletedResults,
+  checkGroupForEmpty,
+} from "./utils";
 import { tabSwitch } from "../../js/uiChange";
 import { getParamTabIndex } from "../../js/utils";
 import { COLORS } from "./const";
@@ -24,6 +38,7 @@ function Tournament({ fullRHData, currentClass }) {
   const tournamentTypeInfo = fullData.finalTypesByClass.find((type) => type.raceClassId == raceClass);
 
   const results = fullData.results;
+  console.log("results", results);
 
   const channelsAndColors = getChannelsAndColors(fullData.channels, COLORS);
 
@@ -35,10 +50,6 @@ function Tournament({ fullRHData, currentClass }) {
   const duplicatedHeatsData = fullData.duplicatedHeats.filter((heat) => heat.classId == raceClass);
   const duplicatedHeatsId = duplicatedHeatsData.map((heat) => heat.heatId);
   const duplicateIds = duplicatedHeatsData.map((heat) => heat.duplicateId);
-
-  const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
-
-  const noResultsHeats = allSlots.filter((slot) => slot.isResults == false).filter((heat) => duplicateIds?.includes(heat.heatId) == false);
 
   const heatsNum = fullData.results["heats_by_class"][raceClass];
   const heatsNumSorted = [];
@@ -58,6 +69,33 @@ function Tournament({ fullRHData, currentClass }) {
   const deletedRounds = fullData.deletedRounds;
   const deletedRoundsInHeats = deletedRounds.filter((data) => heatsNumSorted.includes(data.heatId));
 
+  const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
+
+  const noResultsHeats = allSlots
+    .filter((slot) => {
+      if (slot.isResults == false) {
+        return true;
+      } else {
+        const isDeletingResults = checkDeletedResults(slot, deletedRoundsInHeats, results);
+        if (isDeletingResults) {
+          const isPhantomGroup = checkGroupForEmpty(slot, duplicatedHeatsId);
+          if (isPhantomGroup) {
+				//возможно группа с одним удаленным результатом больше не нужна(как бы её и нет,если есть дубликат)
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      }
+      //раньше было так, а теперь проверяем, если isResults true - есть ли не удаленные раунды
+      //чтобы приравнять удаление всех раундов к отсутствию результатов
+	
+      // return slot.isResults == false && isDeletingResults;
+    })
+    .filter((heat) => duplicateIds?.includes(heat.heatId) == false);
+
   const heatsData = heatsNumSorted
     .map((heatNum) => {
       const heatFromResults = results["heats"][heatNum];
@@ -68,6 +106,7 @@ function Tournament({ fullRHData, currentClass }) {
       }
     })
     .filter((heatData) => heatData.heat_id);
+
 
   //Ломалось без явного указания heatId и heatName...
   //   const roundsWithResultsOld = heatsData
@@ -110,6 +149,7 @@ function Tournament({ fullRHData, currentClass }) {
     })
     .flat();
 
+
   if (tournamentTypeInfo.finalType == "double16") {
     //собираем массив всех выполненных гонок
     const races = getResultRaces(roundsWithResults, allSlots);
@@ -129,137 +169,141 @@ function Tournament({ fullRHData, currentClass }) {
     //соединяем два массива Results и noResults
     const allKnownRaces = [...racesWithStatus, ...plannedRaces];
 
+    //нумеруем гонки
+    const numberedRaces = addRaceNumbers(allKnownRaces);
+
     //делаем массив всех гонок(+пусые)
-    raceInfo = allKnownRaces.length == raceQuantity ? allKnownRaces : addEmptyRaces(allKnownRaces, raceQuantity, pilotsPerHeat);
+    raceInfo = numberedRaces.length == raceQuantity ? numberedRaces : addEmptyRaces(numberedRaces, raceQuantity, pilotsPerHeat);
   }
 
   //If QUALS!!!
-  const pilotsLeaderboard = [];
+  if (tournamentTypeInfo.finalType == "quals") {
+    const pilotsLeaderboard = [];
 
-  const qualsType = getState("tournamentQualsType");
+    const qualsType = getState("tournamentQualsType");
 
-  const consecutivesCount = getState("consecutivesCount");
+    const consecutivesCount = getState("consecutivesCount");
 
-  const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
+    const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
 
-  const qualsSlotsFull = qualSlots.map((slot) => {
-    if (duplicatedHeatsId?.includes(slot.heatId)) {
-      const duplicatedInfo = duplicatedHeatsData.filter((duplicatedHeat) => duplicatedHeat.heatId == slot.heatId);
-      const duplicatedIds = duplicatedInfo.map((dupl) => dupl.duplicateId);
-      const lastSlotInfo = allSlots.find((slot) => slot.heatId == duplicatedIds[duplicatedIds.length - 1]);
-      return { ...slot, pilots: lastSlotInfo.pilots, duplicateHeats: duplicatedIds };
-    } else {
-      return { ...slot, duplicateHeats: false };
-    }
-  });
-
-  const qualsSlotsInfo = qualsSlotsFull.map((slotInfo) => {
-    const diplicatedId = slotInfo.duplicateHeats ? slotInfo.duplicateHeats : [];
-    const heatIds = [+slotInfo.heatId, ...diplicatedId];
-
-    // const roundsForGroupOld = roundsWithResults.filter((round) => {
-    //   console.log("round in OLD", round);
-    //   console.log("+round.heatId OLD", +round.heatId);
-
-    //   return heatIds.includes(+round.heatId);
-    // });
-
-    const roundsForGroup = roundsWithResults.filter((round) => heatIds.includes(+round.heatId));
-
-    const pilotsInfo = slotInfo.pilots.map((pilotSlot) => {
-      const pilotRoundsInfo = roundsForGroup.map((roundInfo) => {
-        const roundResults = roundInfo.leaderboard.by_fastest_lap;
-        const pilotRoundResults = roundResults.find((pilotResults) => pilotResults.pilot_id == pilotSlot.id);
-
-        return pilotRoundResults;
-      });
-
-      const allRounds = Array.from({ length: 10 }, (_, index) => {
-        if (pilotRoundsInfo?.[index]) {
-          return pilotRoundsInfo[index];
-        } else {
-          return {};
-        }
-      });
-
-      const roundsInfo = allRounds.map((round) => {
-        if (round.laps) {
-          const timeString = round[qualsType];
-          const timeStamp = round[`${qualsType}_raw`];
-          const laps = qualsType == "consecutives" ? round.consecutives_base : 1;
-          const pilotId = round.pilot_id;
-          const pilotName = round.callsign;
-          const qualsLapsCount = qualsType == "consecutives" ? consecutivesCount : 1;
-          console.log("consecutivesCount", consecutivesCount);
-
-          return { isRoundResults: true, timeString, timeStamp, laps, pilotId, pilotName, qualsType, qualsLapsCount };
-        } else {
-          return { isRoundResults: false };
-        }
-      });
-      return { ...pilotSlot, roundsInfo: roundsInfo };
-    });
-
-    return { ...slotInfo, pilots: pilotsInfo };
-  });
-
-  const qualsFullInfo = qualsSlotsInfo.map((slotInfo) => {
-    const pilotsInSlotInfo = slotInfo.pilots.map((pilotInfo) => {
-      const pilotInfoObj = {};
-      pilotInfoObj.id = pilotInfo.id;
-      pilotInfoObj.name = pilotInfo.callsign;
-      pilotInfoObj.times = [];
-      const pilotResults = pilotInfo.roundsInfo.filter((info) => info.laps > 0);
-
-      pilotResults.forEach((results) => {
-        const timeString = results.timeString;
-        const timeStamp = results.timeStamp;
-        const laps = results.laps;
-        const qualsLapsCount = results.qualsLapsCount;
-
-        pilotInfoObj.times.push({ timeStamp, timeString, laps, qualsType, qualsLapsCount });
-      });
-
-      if (pilotInfoObj.times.length > 0) {
-        pilotInfoObj.times.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
-
-        pilotInfoObj.bestTime = pilotInfoObj.times[0];
-
-        pilotsLeaderboard.push(pilotInfoObj);
-        return { ...pilotInfo, bestTime: pilotInfoObj.times[0] };
+    const qualsSlotsFull = qualSlots.map((slot) => {
+      if (duplicatedHeatsId?.includes(slot.heatId)) {
+        const duplicatedInfo = duplicatedHeatsData.filter((duplicatedHeat) => duplicatedHeat.heatId == slot.heatId);
+        const duplicatedIds = duplicatedInfo.map((dupl) => dupl.duplicateId);
+        const lastSlotInfo = allSlots.find((slot) => slot.heatId == duplicatedIds[duplicatedIds.length - 1]);
+        return { ...slot, pilots: lastSlotInfo.pilots, duplicateHeats: duplicatedIds };
       } else {
-        return { ...pilotInfo, bestTime: false };
+        return { ...slot, duplicateHeats: false };
       }
     });
-    return { ...slotInfo, pilots: pilotsInSlotInfo };
-  });
 
-  const pilotsLeaderboardFiltered = pilotsLeaderboard.reduce((acc, pilot, index) => {
-    const prevIds = acc.map((pilot) => pilot.id);
+    const qualsSlotsInfo = qualsSlotsFull.map((slotInfo) => {
+      const diplicatedId = slotInfo.duplicateHeats ? slotInfo.duplicateHeats : [];
+      const heatIds = [+slotInfo.heatId, ...diplicatedId];
 
-    const isRepeatId = prevIds.includes(pilot.id);
+      // const roundsForGroupOld = roundsWithResults.filter((round) => {
+      //   console.log("round in OLD", round);
+      //   console.log("+round.heatId OLD", +round.heatId);
 
-    if (isRepeatId) {
-      const prevpilotInfo = acc.find((prevPilot) => prevPilot.id == pilot.id);
-      const newTimes = pilot.times;
-      const prevTimes = prevpilotInfo.times;
-      const allTimes = [...prevTimes, ...newTimes];
+      //   return heatIds.includes(+round.heatId);
+      // });
 
-      const allTimesSorted = allTimes.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
-      const newBestTime = allTimesSorted.length > 0 ? allTimesSorted[0] : false;
+      const roundsForGroup = roundsWithResults.filter((round) => heatIds.includes(+round.heatId));
 
-      const accFiltered = acc.filter((accPilot) => accPilot.id != pilot.id);
+      const pilotsInfo = slotInfo.pilots.map((pilotSlot) => {
+        const pilotRoundsInfo = roundsForGroup.map((roundInfo) => {
+          const roundResults = roundInfo.leaderboard.by_fastest_lap;
+          const pilotRoundResults = roundResults.find((pilotResults) => pilotResults.pilot_id == pilotSlot.id);
 
-      return [...accFiltered, { ...prevpilotInfo, times: allTimes, bestTime: newBestTime }];
-    } else {
-      return [...acc, pilot];
-    }
-  }, []);
+          return pilotRoundResults;
+        });
 
-  const sortedPilotsLeaderboard = pilotsLeaderboardFiltered.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
+        const allRounds = Array.from({ length: 10 }, (_, index) => {
+          if (pilotRoundsInfo?.[index]) {
+            return pilotRoundsInfo[index];
+          } else {
+            return {};
+          }
+        });
 
-  qualsLeaderboard = sortedPilotsLeaderboard;
-  qualsInfo = qualsFullInfo;
+        const roundsInfo = allRounds.map((round) => {
+          if (round.laps) {
+            const timeString = round[qualsType];
+            const timeStamp = round[`${qualsType}_raw`];
+            const laps = qualsType == "consecutives" ? round.consecutives_base : 1;
+            const pilotId = round.pilot_id;
+            const pilotName = round.callsign;
+            const qualsLapsCount = qualsType == "consecutives" ? consecutivesCount : 1;
+
+            return { isRoundResults: true, timeString, timeStamp, laps, pilotId, pilotName, qualsType, qualsLapsCount };
+          } else {
+            return { isRoundResults: false };
+          }
+        });
+        return { ...pilotSlot, roundsInfo: roundsInfo };
+      });
+
+      return { ...slotInfo, pilots: pilotsInfo };
+    });
+
+    const qualsFullInfo = qualsSlotsInfo.map((slotInfo) => {
+      const pilotsInSlotInfo = slotInfo.pilots.map((pilotInfo) => {
+        const pilotInfoObj = {};
+        pilotInfoObj.id = pilotInfo.id;
+        pilotInfoObj.name = pilotInfo.callsign;
+        pilotInfoObj.times = [];
+        const pilotResults = pilotInfo.roundsInfo.filter((info) => info.laps > 0);
+
+        pilotResults.forEach((results) => {
+          const timeString = results.timeString;
+          const timeStamp = results.timeStamp;
+          const laps = results.laps;
+          const qualsLapsCount = results.qualsLapsCount;
+
+          pilotInfoObj.times.push({ timeStamp, timeString, laps, qualsType, qualsLapsCount });
+        });
+
+        if (pilotInfoObj.times.length > 0) {
+          pilotInfoObj.times.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
+
+          pilotInfoObj.bestTime = pilotInfoObj.times[0];
+
+          pilotsLeaderboard.push(pilotInfoObj);
+          return { ...pilotInfo, bestTime: pilotInfoObj.times[0] };
+        } else {
+          return { ...pilotInfo, bestTime: false };
+        }
+      });
+      return { ...slotInfo, pilots: pilotsInSlotInfo };
+    });
+
+    const pilotsLeaderboardFiltered = pilotsLeaderboard.reduce((acc, pilot, index) => {
+      const prevIds = acc.map((pilot) => pilot.id);
+
+      const isRepeatId = prevIds.includes(pilot.id);
+
+      if (isRepeatId) {
+        const prevpilotInfo = acc.find((prevPilot) => prevPilot.id == pilot.id);
+        const newTimes = pilot.times;
+        const prevTimes = prevpilotInfo.times;
+        const allTimes = [...prevTimes, ...newTimes];
+
+        const allTimesSorted = allTimes.sort((a, b) => b.laps - a.laps || a.timeStamp - b.timeStamp);
+        const newBestTime = allTimesSorted.length > 0 ? allTimesSorted[0] : false;
+
+        const accFiltered = acc.filter((accPilot) => accPilot.id != pilot.id);
+
+        return [...accFiltered, { ...prevpilotInfo, times: allTimes, bestTime: newBestTime }];
+      } else {
+        return [...acc, pilot];
+      }
+    }, []);
+
+    const sortedPilotsLeaderboard = pilotsLeaderboardFiltered.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
+
+    qualsLeaderboard = sortedPilotsLeaderboard;
+    qualsInfo = qualsFullInfo;
+  }
 
   if (checkPauses) {
     getRacesPauses(allRaces);
@@ -308,7 +352,7 @@ function Tournament({ fullRHData, currentClass }) {
           <h3 className="tournament__final-name">{fullData.results.classes[raceClass].name}</h3>
           {/* <DirectionSwitcher /> */}
         </div>
-        {tournamentTypeInfo.finalType == "double16" && <Doubles16 raceData={raceInfo} qualsLeaderboard={sortedPilotsLeaderboard} channelsAndColors={channelsAndColors} />}
+        {tournamentTypeInfo.finalType == "double16" && <Doubles16 raceData={raceInfo} qualsPlaces={[{ id: 1, place: 4 }]} channelsAndColors={channelsAndColors} />}
 
         {tournamentTypeInfo.finalType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
       </div>

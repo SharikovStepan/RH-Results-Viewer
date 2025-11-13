@@ -5370,6 +5370,8 @@ body {
 
 		margin: 0px 0px 0px 5px;
 		justify-self: start;
+		text-wrap: nowrap;
+		overflow: visible;
 	}
 
 	&__race-phase {
@@ -5575,6 +5577,7 @@ body {
 	._name-item {
 		cursor: pointer;
 		transition: all 0.3s ease;
+		box-shadow: 0px 0px 0px $color-akcent1Vs, 0px 0px 0px $color-akcent1Vs inset;
 
 		&._no-event {
 			pointer-events: none;
@@ -5602,6 +5605,7 @@ body {
 		}
 
 		@media(hover:none) {
+
 			&._active-animation {
 				transition: all 0.1s ease;
 				box-shadow: 0px 0px 10px $color-akcent2, 0px 0px 5px $color-akcent2 inset;

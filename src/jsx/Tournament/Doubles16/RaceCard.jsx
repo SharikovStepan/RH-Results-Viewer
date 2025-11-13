@@ -23,7 +23,7 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
         </div>
         <div className="tournament__race-sub-tittles">
           <h4 className="tournament__race-name-tittle _race-subtittle">Пилоты</h4>
-          <h4 className="tournament__race-rounds-tittle _race-subtittle">Раунды</h4>
+          <h4 className="tournament__race-rounds-tittle _race-subtittle">Место</h4>
           <h4 className="tournament__race-place-tittle _race-subtittle">Баллы</h4>
         </div>
         <div className="tournament__race-strokes" style={{ gridTemplateRows: `repeat(${pilotsQuantity}, 1fr)` }}>

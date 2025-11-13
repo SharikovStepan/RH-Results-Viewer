@@ -4,8 +4,8 @@ import { DOUBLE_ELIM_GRIDS } from "./const";
 
 import { getState } from "../../../js/sharedStates";
 
-function VerticalTable({channelsAndColors, raceData, activePilot }) {
-  const [activePilotId, setActivePilotId] = useState(null);
+function VerticalTable({channelsAndColors, raceData, getPilotId, activePilotId }) {
+//   const [activePilotId, setActivePilotId] = useState(null);
   const [activeRaces, setActiveRaces] = useState("");
 
   const findStatus = (raceData) => {
@@ -20,15 +20,6 @@ function VerticalTable({channelsAndColors, raceData, activePilot }) {
     findStatus(raceData);
   }, [raceData]);
 
-  const choosePilot = (e) => {
-    const id = e.target.getAttribute("pilot-id");
-    if (id == activePilotId) {
-      setActivePilotId(null);
-    } else {
-      setActivePilotId(id);
-    }
-  };
-
   return (
     <>
       <div className="tournament__vertical-table" >
@@ -37,8 +28,8 @@ function VerticalTable({channelsAndColors, raceData, activePilot }) {
             <RaceCard
               key={`race-${index}`}
               raceData={race}
-              pilotButton={choosePilot}
-              activePilot={activePilotId}
+              pilotButton={getPilotId}
+              activePilotId={activePilotId}
               raceIndex={index}
               gridPositionsData={DOUBLE_ELIM_GRIDS.vertical}
               doubleElimLows={DOUBLE_ELIM_GRIDS.lowTableRaces}

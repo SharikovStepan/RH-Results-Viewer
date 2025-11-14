@@ -119,6 +119,17 @@ $color-stat-frame: #c5c6c7eb;
 
 
 
+$color-channels: #ff0000;
+$color-channels: #004cff;
+$color-channels: #ffee00;
+$color-channels: #00ff08;
+$color-channels: #ff0099;
+$color-channels: #ff8400;
+$color-channels: #9500ff;
+$color-channels: #00fff7;
+
+
+
 body {
 	background: $color-back;
 	font-family: 'Calibri', sans-serif;
@@ -5285,6 +5296,7 @@ body {
 		gap: 30px;
 
 	}
+
 
 	&__race {
 		position: relative;

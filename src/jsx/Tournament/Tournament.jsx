@@ -19,7 +19,7 @@ import {
 } from "./utils";
 import { tabSwitch } from "../../js/uiChange";
 import { getParamTabIndex } from "../../js/utils";
-import { COLORS } from "./const";
+import { COLORS, QUALS_QUANTITY } from "./const";
 import Quals from "./Quals/Quals";
 import Doubles16 from "./Doubles16/Doubles16";
 
@@ -80,7 +80,7 @@ function Tournament({ fullRHData, currentClass }) {
         if (isDeletingResults) {
           const isPhantomGroup = checkGroupForEmpty(slot, duplicatedHeatsId);
           if (isPhantomGroup) {
-				//возможно группа с одним удаленным результатом больше не нужна(как бы её и нет,если есть дубликат)
+            //возможно группа с одним удаленным результатом больше не нужна(как бы её и нет,если есть дубликат)
             return false;
           } else {
             return true;
@@ -91,7 +91,7 @@ function Tournament({ fullRHData, currentClass }) {
       }
       //раньше было так, а теперь проверяем, если isResults true - есть ли не удаленные раунды
       //чтобы приравнять удаление всех раундов к отсутствию результатов
-	
+
       // return slot.isResults == false && isDeletingResults;
     })
     .filter((heat) => duplicateIds?.includes(heat.heatId) == false);
@@ -106,7 +106,6 @@ function Tournament({ fullRHData, currentClass }) {
       }
     })
     .filter((heatData) => heatData.heat_id);
-
 
   //Ломалось без явного указания heatId и heatName...
   //   const roundsWithResultsOld = heatsData
@@ -148,7 +147,6 @@ function Tournament({ fullRHData, currentClass }) {
       }
     })
     .flat();
-
 
   if (tournamentTypeInfo.finalType == "double16") {
     //собираем массив всех выполненных гонок
@@ -218,7 +216,7 @@ function Tournament({ fullRHData, currentClass }) {
           return pilotRoundResults;
         });
 
-        const allRounds = Array.from({ length: 10 }, (_, index) => {
+        const allRounds = Array.from({ length: QUALS_QUANTITY }, (_, index) => {
           if (pilotRoundsInfo?.[index]) {
             return pilotRoundsInfo[index];
           } else {

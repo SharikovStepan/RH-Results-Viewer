@@ -5,7 +5,7 @@ import Doubles16Results from "./Doubles16Results";
 
 function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
-  const [activePilotId, setActivePilotId] = useState(null);
+  const [activePilotId, setActivePilotId] = useState("-");
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1023);
 

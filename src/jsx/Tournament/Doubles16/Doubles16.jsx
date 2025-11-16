@@ -34,7 +34,7 @@ function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
     const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id")
 
     if (id == activePilotId) {
-      setActivePilotId(null);
+      setActivePilotId("-");
     } else {
       setActivePilotId(id);
     }

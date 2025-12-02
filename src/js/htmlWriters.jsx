@@ -927,9 +927,9 @@ export function writeRound(roundRound, roundHeat) {
       pilotElement.append(lapsAreaLapElement);
     }
 
-    const laps = getLapsByName(pilotName, roundHeat, false);
+    const laps = getLapsByName(pilotName, false);
     const roundLaps = laps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
-	const bestLaps = getLapsByName(pilotName, roundHeat, true);
+	const bestLaps = getLapsByName(pilotName, true);
 	const roundBestLaps = bestLaps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
     let bestLap;
     try {
@@ -938,7 +938,7 @@ export function writeRound(roundRound, roundHeat) {
       bestLap = "-:--.---";
     }
 
-    const consecutive = getConsecutivesByName(pilotName, roundHeat, true);
+    const consecutive = getConsecutivesByName(pilotName, true);
     const roundConsecutive = consecutive.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
     let bestConsecutive;
 

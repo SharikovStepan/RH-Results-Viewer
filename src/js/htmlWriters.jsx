@@ -927,11 +927,13 @@ export function writeRound(roundRound, roundHeat) {
       pilotElement.append(lapsAreaLapElement);
     }
 
-    const laps = getLapsByName(pilotName, roundHeat, true);
+    const laps = getLapsByName(pilotName, roundHeat, false);
     const roundLaps = laps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
+	const bestLaps = getLapsByName(pilotName, roundHeat, true);
+	const roundBestLaps = bestLaps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
     let bestLap;
     try {
-      bestLap = roundLaps[0].lapTime;
+      bestLap = roundBestLaps[0].lapTime;
     } catch (error) {
       bestLap = "-:--.---";
     }

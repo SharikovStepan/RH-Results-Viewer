@@ -156,7 +156,7 @@ export function writePilotsHTML() {
       item.pilotName.innerHTML = pilot.name; //Имя пилота
 
       item.allLapsButton.innerHTML = getState("textStrings").pilotsTab.allLaps;
-      const lapsData = getLapsByName(pilot.name, pilot.heat, true); //берем круги пилота
+      const lapsData = getLapsByName(pilot.name, true); //берем круги пилота
 
       item.bestLapText.innerHTML = getState("textStrings").pilotsTab.bestLap;
       try {
@@ -927,13 +927,11 @@ export function writeRound(roundRound, roundHeat) {
       pilotElement.append(lapsAreaLapElement);
     }
 
-    const laps = getLapsByName(pilotName, false);
+    const laps = getLapsByName(pilotName, true);
     const roundLaps = laps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
-	const bestLaps = getLapsByName(pilotName, true);
-	const roundBestLaps = bestLaps.filter((el) => el.roundId == roundRound && el.heatId == roundHeat);
     let bestLap;
     try {
-      bestLap = roundBestLaps[0].lapTime;
+      bestLap = roundLaps[0].lapTime;
     } catch (error) {
       bestLap = "-:--.---";
     }

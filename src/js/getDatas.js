@@ -240,7 +240,7 @@ export function getRound(roundNum, heatNum) {
 
   heatPilots.forEach((element) => {
     //проходимся по каждому пилоту
-    const allLapsData = getLapsByName(element.name, heatNum, false);
+    const allLapsData = getLapsByName(element.name, false);
     // if(getState('CONSOLE_DEBUG'))console.log('allLapsData---allLapsData', allLapsData);
 
     const roundLaps = allLapsData.filter((element) => {

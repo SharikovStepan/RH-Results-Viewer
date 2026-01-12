@@ -113,6 +113,11 @@ let pilotsVsDuel = [];
 export function setDuel(value) {
   pilotsVsDuel.push(value);
 }
+
+export function clearDuel() {
+  pilotsVsDuel = [];
+}
+
 export function getDuel() {
   return pilotsVsDuel;
 }

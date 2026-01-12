@@ -20,7 +20,7 @@ export async function urlUpload() {
     );
 
 
-    console.log("FULL OBJJJ", fullLiveData);
+    console.log("FULL OBJ", fullLiveData);
     //  setState("isUuid", ''); Уже есть uuid
     setState("liveTimestamp", fullLiveData.lastUpdate);
 
@@ -29,11 +29,10 @@ export async function urlUpload() {
     startFileView("uuid");
 
     //  const isLiveTime = getLiveState(Date.now(), fullLiveData.lastUpdate);
-    console.log('getState("isUuid")', getState("isUuid"));
     if (getState("filesListLoaded") == false) {
       await getState("fileListPending");
     }
-    console.log('getState("filesList")getState("filesList")', getState("filesList"));
+   //  console.log('getState("filesList")getState("filesList")', getState("filesList"));
 
     const fileListData = getState("filesList").find((file) => file.uuid == getState("isUuid"));
 
@@ -88,7 +87,7 @@ export async function loadFilesList(calendar) {
     responseData.files.forEach((file) => {
       ///Собираем объект всех файлов из репозитория
       const obj = {};
-      console.log("file.meta.eventStartfile.meta.eventStartfile.meta.eventStart", file.meta.eventStart);
+      // console.log("file.meta.eventStartfile.meta.eventStartfile.meta.eventStart", file.meta.eventStart);
 
       if (file.meta.eventStart) {
         const { date, year, month, day, hours, minutes } = getDateStrings(file.meta.eventStart);
@@ -118,7 +117,7 @@ export async function loadFilesList(calendar) {
         markEventAsFinished(file.uuid);
       }
     });
-    console.log("loadFilesList", getState("filesList"));
+   //  console.log("loadFilesList", getState("filesList"));
 
     getState("filesListResolve")();
     setState("filesListLoaded", true);
@@ -191,9 +190,7 @@ export async function loadLastFile() {
     if (!data.ok) throw new Error(`ошибка загрузки последнего файла: ${data.statusText}`);
 
     const fullResponse = await data.json();
-    console.log("fullResponse", fullResponse.data.lastUpdate);
-
-    console.log('getState("lastFile")getState("lastFile")getState("lastFile")', getState("lastFile"));
+   //  console.log("fullResponse", fullResponse.data.lastUpdate);
 
     setState("mainObj", fullResponse.data.results);
     setState("fullRHData", fullResponse.data);

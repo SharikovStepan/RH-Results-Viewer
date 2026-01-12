@@ -72,7 +72,6 @@ export async function startFileView(fileType) {
     getTab("main")[2].element.addEventListener("click", roundsTabAction); //открываем события вкладки Rounds
 
     const mainTabParam = getParamTabIndex("main");
-    console.log("mainTabParammainTabParammainTabParammainTabParam", mainTabParam);
 
     //переключаемся на вкладку турнира
     if (mainTabParam == -1) {

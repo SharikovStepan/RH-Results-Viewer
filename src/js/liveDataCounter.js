@@ -18,10 +18,21 @@ export function checkLiveData() {
   clearTimeout(getState("checkLiveDataTimeout"));
 
   const timeout = setTimeout(async () => {
-    const newData = await getLiveData(getState("isUuid"));
-    console.log("CHECK DATA");
+    //Раньше запрашивали весь файл
+    //  const newData = await getLiveData(getState("isUuid"));
+    //  console.log("CHECK DATA");
 
-    if (getState("liveTimestamp") != newData.lastUpdate && getState("newLiveData") == false) {
+    //теперь запрашиваем список и ищем по uuid наш файл и там lastUpdate (экономия трафика)
+    const response = await fetch("/api/loadFiles");
+
+    if (!response.ok) throw new Error(`ошибка загрузки fileList: ${response.statusText}`);
+    const responseData = await response.json();
+
+    const currentFile = responseData.files.find((fileInfo) => fileInfo.uuid == getState("isUuid"));
+
+    //  console.log("currentFilecurrentFile,", currentFile.meta.lastUpdate);
+
+    if (getState("liveTimestamp") != currentFile.meta.lastUpdate && getState("newLiveData") == false) {
       setState("newLiveData", true);
     }
     if (getState("newLiveData")) {
@@ -89,7 +100,7 @@ async function refreshData(isTournament) {
 
   //удаляем кнопку и включаем функцию ещё раз
   updateButton?.remove();
-  
+
   checkLiveData();
 }
 

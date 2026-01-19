@@ -25,7 +25,7 @@ const states = {
   tournamentFinalRoundsQuantity: 5,
   tournamentRaceQuantity: 14,
   tournamentPilotsPerHeat: 4,
-  tournamentQualsType: "fastestLap",
+  tournamentQualsType: "fastest_lap",
   finalTypesByClass: [],
   fullRHData: {},
   raceClassesWithFinals: [],

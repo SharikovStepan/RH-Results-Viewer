@@ -185,6 +185,9 @@ function Tournament({ fullRHData, currentClass }) {
 
     const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
 
+    console.log("qualsQuantity", qualsQuantity);
+    console.log("qualsType", qualsType);
+
     const qualsSlotsFull = qualSlots.map((slot) => {
       if (duplicatedHeatsId?.includes(slot.heatId)) {
         const duplicatedInfo = duplicatedHeatsData.filter((duplicatedHeat) => duplicatedHeat.heatId == slot.heatId);
@@ -346,11 +349,10 @@ function Tournament({ fullRHData, currentClass }) {
   return (
     <>
       <div className="tournament__container tab-items">
-        <div className="tournament__tittle">
+        {/* <div className="tournament__tittle">
           <h2 className="tournament__event-name">{fullData.eventName}</h2>
           <h3 className="tournament__final-name">{fullData.results.classes[raceClass].name}</h3>
-          {/* <DirectionSwitcher /> */}
-        </div>
+        </div> */}
         {tournamentTypeInfo.finalType == "double16" && <Doubles16 raceData={raceInfo} qualsPlaces={[{ id: 1, place: 4 }]} channelsAndColors={channelsAndColors} />}
 
         {tournamentTypeInfo.finalType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}

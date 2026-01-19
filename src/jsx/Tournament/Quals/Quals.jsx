@@ -6,6 +6,8 @@ import QualsTable from "./QualsTable";
 function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState(null);
+  console.log("qualsInfoqualsInfo", qualsInfo);
+
   const getUrlParams = () => {
     return new URLSearchParams(window.location.search);
   };

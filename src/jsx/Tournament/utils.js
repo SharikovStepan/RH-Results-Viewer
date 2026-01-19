@@ -247,7 +247,6 @@ export const setRaceStatus = (races, raceQuantity, roundsQuantity, finalRoundsQu
 };
 
 export const getPlannedRaces = (slots, roundsQuantity, pilotsPerHeat = 4) => {
-
   const plannedRaces = slots.map((heat, index) => {
     let pilots = heat.pilots;
 
@@ -343,8 +342,8 @@ export const checkGroupForEmpty = (slot, duplicatedHeatsId) => {
 // };
 
 export const getChannelsAndColors = (channelRawData, colorsArr) => {
-  const bands = channelRawData.frequencies.b;
-  const channels = channelRawData.frequencies.c;
+  const bands = channelRawData?.frequencies?.b || [];
+  const channels = channelRawData?.frequencies?.c || [];
 
   const channelsIndex = bands.map((band, index) => {
     const channelData = {};

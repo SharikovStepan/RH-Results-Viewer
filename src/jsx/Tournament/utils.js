@@ -1,4 +1,5 @@
 import { averageTime } from "../../js/utils";
+import { DOUBLE_ELIM_GRIDS } from "./Doubles16/const";
 
 export const setEmptyRace = (pilotsQuatity) => {
   const pilotsId = Array.from({ length: pilotsQuatity }, (_, index) => 0);
@@ -207,7 +208,7 @@ export const setRaceScores = (races, pilotsQuatity) => {
   return racesWithScore;
 };
 
-export const setRaceStatus = (races, raceQuantity, roundsQuantity, finalRoundsQuantity) => {
+export const setRaceStatus = (races, raceQuantity, roundsQuantity, finalRoundsQuantity, pilotsPerHeat, placeRaces) => {
   const racesWithStatus = races.map((race, index) => {
     if (index != races.length - 1) {
       return { ...race, status: "complete" };
@@ -226,10 +227,21 @@ export const setRaceStatus = (races, raceQuantity, roundsQuantity, finalRoundsQu
         });
         return { ...race, pilotsRoundPlaces: roundsAndEmpty, status: "current" };
       } else if (race.roundsSum == roundNeedQuantity) {
-        const placesArr = race.pilotsRacePlaces.map((race) => race.score);
-        const placesArrFilter = placesArr.filter((place) => place != 0);
-        const uniqueScoreSet = new Set(placesArrFilter);
-        if (placesArrFilter.length != uniqueScoreSet.size) {
+        let noNeedDuelsPilotsIndex = [];
+
+        if (placeRaces.includes(index + 1)) {
+          noNeedDuelsPilotsIndex = pilotsPerHeat == 4 ? [0] : pilotsPerHeat == 6 ? [0, 1] : [];
+        } else if (index != raceQuantity - 1) {
+          noNeedDuelsPilotsIndex = pilotsPerHeat == 4 ? [0, 3] : pilotsPerHeat == 6 ? [0, 1, 4, 5] : [];
+        }
+
+        const scoresArr = race.pilotsRacePlaces.map((race, index) => !noNeedDuelsPilotsIndex.includes(index) && race.score);
+        const scoresArrFilter = scoresArr.filter((place) => place != 0);
+        const uniqueScoreSet = new Set(scoresArrFilter);
+
+        const isNeedDuels = scoresArrFilter.length != uniqueScoreSet.size;
+
+        if (isNeedDuels) {
           const rounds = race.pilotsRoundPlaces;
           const emptyRound = race.pilotsId.map((pilotId) => {
             return { id: pilotId, time: 0, laps: 0, place: 0 };

@@ -22,6 +22,7 @@ import { getParamTabIndex } from "../../js/utils";
 import { COLORS, QUALS_QUANTITY } from "./const";
 import Quals from "./Quals/Quals";
 import Doubles16 from "./Doubles16/Doubles16";
+import { PLACE_TABLE_RACES } from "./Doubles16/const";
 
 const checkPauses = false;
 
@@ -156,9 +157,10 @@ function Tournament({ fullRHData, currentClass }) {
 
     //Здесь счет каждой гонки, уже не раунда
     const racesWithScore = setRaceScores(raceWithDuels, pilotsPerHeat);
+    console.log("racesWithScoreracesWithScore", racesWithScore);
 
     //ставим статус complete и проверяем последнюю гонку, complete она или нет
-    const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity);
+    const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity,pilotsPerHeat, PLACE_TABLE_RACES);
 
     //собираем массив предстоящих гонок
     const plannedRaces = getPlannedRaces(noResultsHeats, roundsQuantity, pilotsPerHeat);

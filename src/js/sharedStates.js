@@ -1,6 +1,6 @@
 const states = {
   mainObj: {},
-  consecutivesCount: 2,
+  consecutivesCount: 3,
   currentClass: 1,
   allRaceClassesId: [],
   language: "ru",
@@ -25,11 +25,12 @@ const states = {
   tournamentFinalRoundsQuantity: 5,
   tournamentRaceQuantity: 14,
   tournamentPilotsPerHeat: 4,
-  tournamentQualsType: "consecutives",
+  tournamentQualsType: "fastestLap",
   finalTypesByClass: [],
   fullRHData: {},
   raceClassesWithFinals: [],
   reactRoot: null,
+  qualsQuantity: 8,
 };
 
 const subscribers = {};

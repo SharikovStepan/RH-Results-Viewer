@@ -38,7 +38,6 @@ function Tournament({ fullRHData, currentClass }) {
   const tournamentTypeInfo = fullData.finalTypesByClass.find((type) => type.raceClassId == raceClass);
 
   const results = fullData.results;
-  console.log("results", results);
 
   const channelsAndColors = getChannelsAndColors(fullData.channels, COLORS);
 
@@ -178,9 +177,11 @@ function Tournament({ fullRHData, currentClass }) {
   if (tournamentTypeInfo.finalType == "quals") {
     const pilotsLeaderboard = [];
 
-    const qualsType = getState("tournamentQualsType");
+    const qualsType = fullData.quals?.type ? fullData.quals.type : getState("tournamentQualsType");
 
     const consecutivesCount = getState("consecutivesCount");
+
+    const qualsQuantity = fullData.quals?.quantity ? fullData.quals.quantity : getState("qualsQuantity");
 
     const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
 
@@ -216,7 +217,7 @@ function Tournament({ fullRHData, currentClass }) {
           return pilotRoundResults;
         });
 
-        const allRounds = Array.from({ length: QUALS_QUANTITY }, (_, index) => {
+        const allRounds = Array.from({ length: qualsQuantity }, (_, index) => {
           if (pilotRoundsInfo?.[index]) {
             return pilotRoundsInfo[index];
           } else {

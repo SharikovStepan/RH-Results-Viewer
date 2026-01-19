@@ -142,7 +142,7 @@ $color-channels: #00fff7;
 	src: url("../fonts/a_Futurica-Light.woff2") format('woff2');
 	font-weight: 300;
 	font-style: normal;
-	font-display: swap;
+	// font-display: swap;
 }
 
 
@@ -151,7 +151,7 @@ $color-channels: #00fff7;
 	src: url("../fonts/a_Futurica-regular.woff2") format('woff2');
 	font-weight: 400;
 	font-style: normal;
-	font-display: swap;
+	// font-display: swap;
 }
 
 @font-face {
@@ -159,7 +159,7 @@ $color-channels: #00fff7;
 	src: url("../fonts/a_Futurica-Medium.woff2") format('woff2');
 	font-weight: 500;
 	font-style: normal;
-	font-display: swap;
+	// font-display: swap;
 }
 
 @font-face {
@@ -167,7 +167,7 @@ $color-channels: #00fff7;
 	src: url("../fonts/a_Futurica-SemiBold.woff2") format('woff2');
 	font-weight: 600;
 	font-style: normal;
-	font-display: swap;
+	// font-display: swap;
 }
 
 @font-face {
@@ -175,7 +175,7 @@ $color-channels: #00fff7;
 	src: url("../fonts/a_Futurica-Bold.woff2") format('woff2');
 	font-weight: 700;
 	font-style: normal;
-	font-display: swap;
+	// font-display: swap;
 }
 
 
@@ -227,7 +227,7 @@ $color-channels: #00fff7;
 
 body {
 	background: $color-back;
-	font-family: 'Futurica', sans-serif;
+	font-family: 'Futurica', 'Calibri', sans-serif;
 	letter-spacing: 0.04rem;
 	text-shadow: 1px 1px 3px $color-back;
 

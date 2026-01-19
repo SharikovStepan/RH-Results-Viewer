@@ -15,15 +15,18 @@ export default async function handler(req, res) {
     return res.status(204).end(); // No Content
   }
   setCorsHeaders(res);
-
-  if (req.body.deleteUuid) {
+  const isDeletingCommand = req.body.deleteUuid ? true : false;
+  if (isDeletingCommand) {
     try {
-      await redis.del(req.body.deleteUuid);
+      const uuidToDelete = req.body.deleteUuid;
+      console.log("uuidToDelete, ", uuidToDelete);
+
+      await redis.del(uuidToDelete);
 
       const filesRaw = await redis.get("FILES");
       let filesList = Array.isArray(filesRaw) ? filesRaw : [];
 
-      filesList = filesList.filter((entry) => entry.uuid !== req.body.deleteUuid);
+      filesList = filesList.filter((entry) => entry.uuid !== uuidToDelete);
 
       await redis.set("FILES", filesList);
 

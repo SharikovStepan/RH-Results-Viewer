@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   if (isDeletingCommand) {
     try {
       const uuidToDelete = req.body.deleteUuid;
-      console.log("uuidToDelete, ", uuidToDelete);
+      // console.log("uuidToDelete, ", uuidToDelete);
 
       await redis.del(uuidToDelete);
 

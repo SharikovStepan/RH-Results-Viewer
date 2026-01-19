@@ -5266,7 +5266,21 @@ body {
 	}
 }
 
-
+.channel-and-color {
+	font-family: 'Calibri', sans-serif;
+	width: 20px;
+	height: 20px;
+	// font-size: 12px;
+	text-align: center;
+	font-weight: 600;
+	color: $color-back;
+	padding: 2px 1px;
+	border-radius: 5px;
+	border: 1px solid $color-grey;
+	text-shadow: 0px 0px 3px #aaa;
+	// width: clamp(30px, 1.6vw, 50px);
+	flex: 0 0 auto;
+}
 
 .tournament {
 	width: 100%;
@@ -5594,20 +5608,7 @@ body {
 			text-overflow: ellipsis;
 		}
 
-		.channel-and-color {
-			flex: 0 0 auto;
 
-			text-align: center;
-			font-weight: 700;
-			color: $color-back;
-			padding: 2px 1px;
-			border-radius: 5px;
-			border: 1px solid $color-grey;
-			// width: clamp(30px, 1.6vw, 50px);
-
-			flex: 0 0 auto;
-
-		}
 	}
 
 	&__pilot-rounds {
@@ -5915,21 +5916,6 @@ body {
 			}
 		}
 
-
-		.channel-and-color {
-			flex: 0 0 auto;
-
-			text-align: center;
-			font-weight: 700;
-			color: $color-back;
-			padding: 2px 1px;
-			border-radius: 5px;
-			border: 1px solid $color-grey;
-			// width: clamp(30px, 1.6vw, 50px);
-
-			flex: 0 0 auto;
-
-		}
 
 	}
 

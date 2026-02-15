@@ -160,7 +160,7 @@ function Tournament({ fullRHData, currentClass }) {
     console.log("racesWithScoreracesWithScore", racesWithScore);
 
     //ставим статус complete и проверяем последнюю гонку, complete она или нет
-    const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity,pilotsPerHeat, PLACE_TABLE_RACES);
+    const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity, pilotsPerHeat, PLACE_TABLE_RACES);
 
     //собираем массив предстоящих гонок
     const plannedRaces = getPlannedRaces(noResultsHeats, roundsQuantity, pilotsPerHeat);
@@ -179,6 +179,8 @@ function Tournament({ fullRHData, currentClass }) {
   if (tournamentTypeInfo.finalType == "quals") {
     const pilotsLeaderboard = [];
 
+    const qualsLandmarks = fullData.quals?.landmarks || [];
+
     const qualsType = fullData.quals?.type ? fullData.quals.type : getState("tournamentQualsType");
 
     const consecutivesCount = getState("consecutivesCount");
@@ -186,9 +188,6 @@ function Tournament({ fullRHData, currentClass }) {
     const qualsQuantity = fullData.quals?.quantity ? fullData.quals.quantity : getState("qualsQuantity");
 
     const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
-
-    console.log("qualsQuantity", qualsQuantity);
-    console.log("qualsType", qualsType);
 
     const qualsSlotsFull = qualSlots.map((slot) => {
       if (duplicatedHeatsId?.includes(slot.heatId)) {
@@ -303,9 +302,23 @@ function Tournament({ fullRHData, currentClass }) {
       }
     }, []);
 
-    const sortedPilotsLeaderboard = pilotsLeaderboardFiltered.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
+    const withLandmarks = [...pilotsLeaderboardFiltered, ...qualsLandmarks];
 
-    qualsLeaderboard = sortedPilotsLeaderboard;
+    const sortedPilotsLeaderboard = withLandmarks.sort((a, b) => b.bestTime.laps - a.bestTime.laps || a.bestTime.timeStamp - b.bestTime.timeStamp);
+
+    let placeCount = 1;
+    const withPlace = sortedPilotsLeaderboard.map((pilotInfo) => {
+      if (pilotInfo.landmark) {
+        return pilotInfo;
+      } else {
+        const pilotPlace = placeCount;
+        placeCount++;
+        return { ...pilotInfo, place: pilotPlace };
+      }
+    });
+    console.log("withPlace", withPlace);
+
+    qualsLeaderboard = withPlace;
     qualsInfo = qualsFullInfo;
   }
 

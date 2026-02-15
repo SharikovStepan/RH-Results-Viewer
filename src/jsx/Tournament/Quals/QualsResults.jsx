@@ -4,8 +4,10 @@ import { getStringGap } from "../utils";
 function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
   const topQuantity = 16;
 
-  const topPilots = qualsLeaderboard.slice(0, topQuantity);
-  const botPilots = qualsLeaderboard.slice(topQuantity);
+  const lastToIndex = qualsLeaderboard.findIndex((pilotInfo) => pilotInfo.place == topQuantity);
+
+  const topPilots = qualsLeaderboard.slice(0, lastToIndex + 1);
+  const botPilots = qualsLeaderboard.slice(lastToIndex + 1);
 
   const handleClick = (e) => {
     getPilotId(e);
@@ -24,7 +26,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
 
             <div className="quals-results__top-pilots">
               {topPilots.map((pilot, index) => {
-                const place = index + 1;
+                const place = pilot.place;
                 const pilotName = pilot.name;
                 const pilotId = pilot.id;
                 const bestTimeStamp = pilot.bestTime.timeStamp;
@@ -33,6 +35,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const qualsLapsCount = pilot.bestTime.qualsLapsCount;
                 const previousTimeStamp = index == 0 ? bestTimeStamp : topPilots[index - 1].bestTime.timeStamp;
                 const previousLaps = index == 0 ? laps : topPilots[index - 1].bestTime.laps;
+                const isLandmark = pilot.landmark ? true : false;
 
                 const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
 
@@ -43,15 +46,15 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     key={`${pilotName}-${pilotId}`}
-                    onClick={handleClick}
+                    onClick={!isLandmark && handleClick}
                     pilot-id={pilotId}
-                    className={`quals-results__top-pilot _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
-                    <div className="quals-results__top-pilot-name">
-                      <p>{place}</p>
+                    className={`${isLandmark ? "quals-results__landmark" : "quals-results__top-pilot"} _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
+                    <div className={`${isLandmark ? "quals-results__landmark-name" : "quals-results__top-pilot-name"}`}>
+                      <p>{place || ""}</p>
                       <p>{pilotName}</p>
                     </div>
-                    <div className="quals-results__top-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
-                    <div className="quals-results__top-pilot-gap">{index == 0 ? "-" : gapTime}</div>
+                    <div className={`${isLandmark ? "quals-results__landmark-time" : "quals-results__top-pilot-time"}`}>{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
+                    <div className={`${isLandmark ? "quals-results__landmark-gap" : "quals-results__top-pilot-gap"}`}>{index == 0 ? "-" : gapTime}</div>
                   </motion.div>
                 );
               })}
@@ -61,7 +64,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
           <div className="quals-results__bot-container">
             <div className="quals-results__bot-pilots">
               {botPilots.map((pilot, index) => {
-                const place = topQuantity + index + 1;
+                const place = pilot.place;
                 const pilotName = pilot.name;
                 const pilotId = pilot.id;
                 const laps = pilot.bestTime.laps;
@@ -70,6 +73,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const bestTimeString = pilot.bestTime.timeString;
                 const previousTimeStamp = index == 0 ? topPilots[topPilots.length - 1].bestTime.timeStamp : botPilots[index - 1].bestTime.timeStamp;
                 const previousLaps = index == 0 ? topPilots[topPilots.length - 1].bestTime.laps : botPilots[index - 1].bestTime.laps;
+                const isLandmark = pilot.landmark ? true : false;
 
                 const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
 
@@ -82,13 +86,13 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                     key={`${pilotName}-${pilotId}`}
                     pilot-id={pilotId}
                     onClick={handleClick}
-                    className={`quals-results__bot-pilot _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
-                    <div className="quals-results__bot-pilot-name">
-                      <p>{place}</p>
+                    className={`${isLandmark ? "quals-results__landmark" : "quals-results__bot-pilot"} _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>
+                    <div className={`${isLandmark ? "quals-results__landmark-name" : "quals-results__bot-pilot-name"} `}>
+                      <p>{place || ""}</p>
                       <p>{pilotName}</p>
                     </div>
-                    <div className="quals-results__bot-pilot-time">{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
-                    <div className="quals-results__bot-pilot-gap">{gapTime}</div>
+                    <div className={`${isLandmark ? "quals-results__landmark-time" : "quals-results__bot-pilot-time"} `}>{qualsLapsCount == laps ? bestTimeString : `${laps}/${bestTimeString}`}</div>
+                    <div className={`${isLandmark ? "quals-results__landmark-gap" : "quals-results__bot-pilot-gap"} `}>{gapTime}</div>
                   </motion.div>
                 );
               })}

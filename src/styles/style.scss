@@ -6127,7 +6127,7 @@ body {
 		width: 100%;
 		justify-items: center;
 		align-items: center;
-		min-height: 40px;
+		min-height: 50px;
 		color: $color-akcent1Vs;
 
 		&:not(:last-child):before {
@@ -6153,7 +6153,6 @@ body {
 		font-size: 18px;
 		font-weight: 300;
 		position: relative;
-
 		@media(max-width:510px) {
 			font-size: 16px;
 		}
@@ -6193,7 +6192,8 @@ body {
 		font-weight: 500;
 		position: relative;
 		text-shadow: 1px 1px 3px #000;
-
+		// height: 100%;
+		text-align: center;
 		@media(max-width:510px) {
 			font-size: 16px;
 		}
@@ -6203,7 +6203,7 @@ body {
 		}
 
 		p:last-child {
-			overflow: hidden;
+			// overflow: hidden;
 			text-overflow: ellipsis;
 			// text-wrap: nowrap;
 		}

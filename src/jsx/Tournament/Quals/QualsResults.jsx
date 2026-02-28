@@ -6,8 +6,8 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
 
   const lastToIndex = qualsLeaderboard.findIndex((pilotInfo) => pilotInfo.place == topQuantity);
 
-  const topPilots = qualsLeaderboard.slice(0, lastToIndex + 1);
-  const botPilots = qualsLeaderboard.slice(lastToIndex + 1);
+  const topPilots = lastToIndex != -1 ? qualsLeaderboard.slice(0, lastToIndex + 1) : qualsLeaderboard;
+  const botPilots = lastToIndex != -1 ? qualsLeaderboard.slice(lastToIndex + 1) : [];
 
   const handleClick = (e) => {
     getPilotId(e);
@@ -33,7 +33,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const bestTimeString = pilot.bestTime.timeString;
                 const laps = pilot.bestTime.laps;
                 const qualsLapsCount = pilot.bestTime.qualsLapsCount;
-                const previousTimeStamp = index == 0 ? bestTimeStamp : topPilots[index - 1].bestTime.timeStamp;
+                const previousTimeStamp = index == 0 ? bestTimeStamp : topPilots[index - 1]?.bestTime.timeStamp;
                 const previousLaps = index == 0 ? laps : topPilots[index - 1].bestTime.laps;
                 const isLandmark = pilot.landmark ? true : false;
 
@@ -71,8 +71,8 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const qualsLapsCount = pilot.bestTime.qualsLapsCount;
                 const bestTimeStamp = pilot.bestTime.timeStamp;
                 const bestTimeString = pilot.bestTime.timeString;
-                const previousTimeStamp = index == 0 ? topPilots[topPilots.length - 1].bestTime.timeStamp : botPilots[index - 1].bestTime.timeStamp;
-                const previousLaps = index == 0 ? topPilots[topPilots.length - 1].bestTime.laps : botPilots[index - 1].bestTime.laps;
+                const previousTimeStamp = index == 0 ? topPilots[topPilots.length - 1]?.bestTime.timeStamp : botPilots[index - 1]?.bestTime.timeStamp;
+                const previousLaps = index == 0 ? topPilots[topPilots.length - 1]?.bestTime.laps : botPilots[index - 1]?.bestTime.laps;
                 const isLandmark = pilot.landmark ? true : false;
 
                 const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;

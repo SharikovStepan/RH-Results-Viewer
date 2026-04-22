@@ -2260,7 +2260,7 @@ export async function tournamentRender(isTournament, isEmptyHeats, fileType) {
     if (!document.querySelector(".buttons__tournament")) {
       const tournamentButton = document.createElement("button");
       tournamentButton.classList.add("buttons__tournament", "_button");
-      tournamentButton.innerHTML = "Турнир";
+      tournamentButton.innerHTML = getState("textStrings").tournamentTab.tabName;
       document.querySelector(".buttons__container").append(tournamentButton);
       addButton("tournament", tournamentButton);
 

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { getStringGap } from "../utils";
-
+import { getState } from "../../../js/sharedStates";
 function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
   const topQuantity = 16;
 
@@ -19,9 +19,9 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
         <div className="quals-results__container">
           <div className="quals-results__top-container">
             <div className="quals-results__tittles">
-              <div className="quals-results__tittle-name">Имя</div>
-              <div className="quals-results__tittle-time">Время</div>
-              <div className="quals-results__tittle-lead">Отставание</div>
+              <div className="quals-results__tittle-name">{getState("textStrings").tournamentTab.name}</div>
+              <div className="quals-results__tittle-time">{getState("textStrings").tournamentTab.time}</div>
+              <div className="quals-results__tittle-lead">{getState("textStrings").tournamentTab.gap}</div>
             </div>
 
             <div className="quals-results__top-pilots">
@@ -37,7 +37,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const previousLaps = index == 0 ? laps : topPilots[index - 1].bestTime.laps;
                 const isLandmark = pilot.landmark ? true : false;
 
-                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
+                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} ${getState("textStrings").tournamentTab.lap}`;
 
                 return (
                   <motion.div
@@ -75,7 +75,7 @@ function QualsResults({ qualsLeaderboard, activePilotId, getPilotId }) {
                 const previousLaps = index == 0 ? topPilots[topPilots.length - 1]?.bestTime.laps : botPilots[index - 1]?.bestTime.laps;
                 const isLandmark = pilot.landmark ? true : false;
 
-                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} круг`;
+                const gapTime = laps == previousLaps ? getStringGap(bestTimeStamp, previousTimeStamp) : `+${previousLaps - laps} ${getState("textStrings").tournamentTab.lap}`;
 
                 return (
                   <motion.div

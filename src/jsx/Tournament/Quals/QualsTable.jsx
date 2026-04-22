@@ -1,5 +1,6 @@
 import ChannelAndColor from "../../ChannelAndColor";
 import React from "react";
+import { getState } from "../../../js/sharedStates";
 
 function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId }) {
   const handleClsick = (e) => {
@@ -20,7 +21,7 @@ function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId })
                 <div className="quals__group">
                   <div className="quals__tittles">
                     <div className="quals__heat-name">{heatName}</div>
-                    <div className="quals__rounds-tittle">Раунды</div>
+                    <div className="quals__rounds-tittle">{getState("textStrings").tournamentTab.rounds}</div>
                     <div className="quals__round-num" style={{ gridTemplateColumns: `repeat(${roundsArr.length},1fr)` }}>
                       {roundsArr.map((round, index) => {
                         return <p key={`${qualHeat.heatId}-round-${index}`}>{index + 1}</p>;
@@ -87,179 +88,6 @@ function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId })
           })}
         </div>
       </div>
-
-      {/* <div className="quals">
-        <div className="quals__container">
-          <div className="quals__group">
-            <div className="quals__tittles">
-              <div className="quals__heat-name">Группа 1</div>
-              <div className="quals__rounds-tittle">Раунды</div>
-              <div className="quals__round-num">
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
-                <p>7</p>
-                <p>8</p>
-                <p>9</p>
-                <p>10</p>
-              </div>
-            </div>
-            <div className="quals__pilots-stats">
-              <div className="quals__pilots-names">
-                <div className="quals__pilot-name pilot-1-name">
-                  <p>Алексей Родин</p>
-                  {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
-                </div>
-                <div className="quals__pilot-name pilot-2-name">
-                  <p>Станкевич Алексей</p>
-                  {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
-                </div>
-                <div className="quals__pilot-name pilot-3-name">
-                  <p>Владислав Меньшиков</p>
-                  {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
-                </div>
-                <div className="quals__pilot-name pilot-4-name">
-                  <p>Кошка 1</p>
-                  {channelData && <ChannelAndColor channel={channelData?.channel} color={channelData?.color} />}
-                </div>
-              </div>
-              <div className="quals__pilots-times">
-                <div className="quals__pilot-times pilot-1-times">
-                  <div className="quals__pilot-time pilot-1-time-1 _best-quals-time">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-2">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-3">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-4">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-5">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-6">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-7">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-8">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-9">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-1-time-10">
-                    <p>0:37.666</p>
-                  </div>
-                </div>
-                <div className="quals__pilot-times pilot-2-times">
-                  <div className="quals__pilot-time pilot-2-time-1">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-2 _bad-qual-time">
-                    <p>1/0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-3">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-4">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-5 _best-quals-time">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-6 _bad-qual-time">
-                    <p>2/0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-7">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-8">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-9">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-2-time-10">
-                    <p>0:37.666</p>
-                  </div>
-                </div>
-                <div className="quals__pilot-times pilot-3-times">
-                  <div className="quals__pilot-time pilot-3-time-1">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-2">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-3 _bad-qual-time">
-                    <p>2/0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-4">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-5">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-6">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-7">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-8 _best-quals-time">
-                    <p>0:10.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-9">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-3-time-10">
-                    <p>0:37.666</p>
-                  </div>
-                </div>
-                <div className="quals__pilot-times pilot-4-times">
-                  <div className="quals__pilot-time pilot-4-time-1">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-2">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-3">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-4">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-5">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-6">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-7">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-8">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-9">
-                    <p>0:37.666</p>
-                  </div>
-                  <div className="quals__pilot-time pilot-4-time-10 _best-quals-time">
-                    <p>0:37.666</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

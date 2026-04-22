@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import { DOUBLE_ELIM_GRIDS } from "./const";
 import ChannelAndColor from "../../ChannelAndColor";
+import { getState } from "../../../js/sharedStates";
+
 function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilotId, doubleElimLows, activeRaces, pilotsQuantity }) {
   const [isCurrentRace, isCompleteRace, isNextRace] = activeRaces || [];
 
@@ -15,16 +17,22 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
 		  ${isCurrentRace == raceIndex ? "_current-race" : ""} ${isCompleteRace == raceIndex ? "_last-complete-race" : ""} ${isNextRace == raceIndex ? "_next-race" : ""}`}
         style={{ gridRow: `${gridPositionsData[raceIndex]?.gridRow}`, gridColumn: `${gridPositionsData[raceIndex]?.gridColumn}` }}>
         <div className="tournament__race-tittles">
-          <h3 className="tournament__race-num">{`Гонка ${raceIndex + 1}`}</h3>
+          <h3 className="tournament__race-num">{`${getState("textStrings").tournamentTab.race} ${raceIndex + 1}`}</h3>
           <h4 className="tournament__race-phase">{DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase}</h4>
           <h2 className={`tournament__race-status ${activeRaces.includes(raceIndex) ? "" : "_hidden"}`}>
-            {raceIndex == isCurrentRace ? "Сейчас" : raceIndex == isCompleteRace ? "Завершена" : raceIndex == isNextRace ? "Следующая" : ""}
+            {raceIndex == isCurrentRace
+              ? getState("textStrings").tournamentTab.now
+              : raceIndex == isCompleteRace
+              ? getState("textStrings").tournamentTab.completed
+              : raceIndex == isNextRace
+              ? getState("textStrings").tournamentTab.next
+              : ""}
           </h2>
         </div>
         <div className="tournament__race-sub-tittles">
-          <h4 className="tournament__race-name-tittle _race-subtittle">Пилоты</h4>
-          <h4 className="tournament__race-rounds-tittle _race-subtittle">Место</h4>
-          <h4 className="tournament__race-place-tittle _race-subtittle">Баллы</h4>
+          <h4 className="tournament__race-name-tittle _race-subtittle">{getState("textStrings").tournamentTab.pilots}</h4>
+          <h4 className="tournament__race-rounds-tittle _race-subtittle">{getState("textStrings").tournamentTab.place}</h4>
+          <h4 className="tournament__race-place-tittle _race-subtittle">{getState("textStrings").tournamentTab.scores}</h4>
         </div>
         <div className="tournament__race-strokes" style={{ gridTemplateRows: `repeat(${pilotsQuantity}, 1fr)` }}>
           {raceData.pilotsRacePlaces?.map((pilotData, index) => {
@@ -46,7 +54,9 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
                 <div
                   pilot-id={pilotData.id}
                   onClick={pilotButton}
-                  className={`tournament__pilot-name _name-item _race-item _pilot-button ${+activePilotId == +pilotData.id ? "_active" : ""} ${losersNums.includes(index) && raceNum != 14 ? "loser" : ""}`}>
+                  className={`tournament__pilot-name _name-item _race-item _pilot-button ${+activePilotId == +pilotData.id ? "_active" : ""} ${
+                    losersNums.includes(index) && raceNum != 14 ? "loser" : ""
+                  }`}>
                   <p>{pilotPlace}</p>
                   <p>{pilotName}</p>
                   {channelData && <ChannelAndColor channel={channelData.channel} color={channelData.color} />}

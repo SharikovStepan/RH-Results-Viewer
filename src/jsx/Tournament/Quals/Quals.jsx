@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import QualsResults from "./QualsResults";
 import QualsTable from "./QualsTable";
-
+import { getState } from "../../../js/sharedStates";
 function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState(null);
@@ -43,10 +43,10 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
     <>
       <div className="tournament__buttons _buttons-wrapper">
         <button name="table" onClick={tabSwitch} className={`tournament__button _button ${activeTab == "table" ? "_active _no-event" : ""}`}>
-          Квалификация
+          {getState("textStrings").tournamentTab.quals}
         </button>
         <button name="results" onClick={tabSwitch} className={`tournament__button _button ${activeTab == "results" ? "_active _no-event" : ""}`}>
-          Результаты
+          {getState("textStrings").tournamentTab.results}
         </button>
       </div>
       {activeTab == "table" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId} channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} />}

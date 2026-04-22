@@ -1,8 +1,9 @@
 import { getDoubles16Results } from "./utils";
 import { motion } from "motion/react";
+import { getState } from "../../../js/sharedStates";
+
 
 function Doubles16Results({ raceData, getPilotId, activePilotId }) {
-	
   const handleClick = (e) => {
     getPilotId(e);
   };
@@ -21,8 +22,8 @@ function Doubles16Results({ raceData, getPilotId, activePilotId }) {
         <div className="doubles16-results__container">
           <div className="doubles16-results__pilots-container">
             <div className="doubles16-results__tittles">
-              <div className="doubles16-results__tittle-place">Место</div>
-              <div className="doubles16-results__tittle-name">Имя</div>
+              <div className="doubles16-results__tittle-place">{getState("textStrings").tournamentTab.place}</div>
+              <div className="doubles16-results__tittle-name">{getState("textStrings").tournamentTab.name}</div>
 
               {/* <div className="doubles16-results__tittle-lead">Отставание</div> */}
             </div>

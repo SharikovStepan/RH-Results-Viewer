@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Doubles16TableHorizontal from "./Doubles16TableHorizontal";
 import Doubles16TableVertical from "./Doubles16TableVertical";
 import Doubles16Results from "./Doubles16Results";
-
+import { getState } from "../../../js/sharedStates";
 function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState("-");
@@ -52,10 +52,10 @@ function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
     <>
       <div className="tournament__buttons _buttons-wrapper">
         <button name="table" onClick={tabSwitch} className={`tournament__button _button ${activeTab == "table" ? "_active _no-event" : ""}`}>
-          Таблица
+          {getState("textStrings").tournamentTab.table}
         </button>
         <button name="results" onClick={tabSwitch} className={`tournament__button _button ${activeTab == "results" ? "_active _no-event" : ""}`}>
-          Результаты
+          {getState("textStrings").tournamentTab.results}
         </button>
       </div>
 

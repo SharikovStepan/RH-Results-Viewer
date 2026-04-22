@@ -14,8 +14,8 @@ export const DOUBLE_ELIM_GRIDS = {
     { raceId: 10, gridRow: "21/25", gridColumn: "2/3", racePhase: "1/8" },
     { raceId: 11, gridRow: "7/11", gridColumn: "3/4", racePhase: "1/4" },
     { raceId: 12, gridRow: "19/23", gridColumn: "3/4", racePhase: "1/4" },
-    { raceId: 13, gridRow: "18/24", gridColumn: "4/5", racePhase: getState("textStrings").tournamentTab.semifinal },
-    { raceId: 14, gridRow: "6/12", gridColumn: "4/5", racePhase: getState("textStrings").tournamentTab.final },
+    { raceId: 13, gridRow: "18/24", gridColumn: "4/5", racePhase: "1/2" },
+    { raceId: 14, gridRow: "6/12", gridColumn: "4/5", racePhase: "1/1" },
   ],
   vertical: [
     { raceId: 1, gridRow: "1/2", gridColumn: "1/2" },

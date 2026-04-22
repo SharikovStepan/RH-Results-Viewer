@@ -10,6 +10,13 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
   const raceStatus = raceData.status;
   const losersNums = Array.from({ length: pilotsQuantity / 2 }, (_, index) => pilotsQuantity - 1 - index);
 
+  const racePhaseText =
+    DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase == "1/2"
+      ? getState("textStrings").tournamentTab.semifinal
+      : DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase == "1/1"
+      ? getState("textStrings").tournamentTab.final
+      : DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase;
+		
   return (
     <>
       <div
@@ -18,7 +25,7 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
         style={{ gridRow: `${gridPositionsData[raceIndex]?.gridRow}`, gridColumn: `${gridPositionsData[raceIndex]?.gridColumn}` }}>
         <div className="tournament__race-tittles">
           <h3 className="tournament__race-num">{`${getState("textStrings").tournamentTab.race} ${raceIndex + 1}`}</h3>
-          <h4 className="tournament__race-phase">{DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase}</h4>
+          <h4 className="tournament__race-phase">{racePhaseText}</h4>
           <h2 className={`tournament__race-status ${activeRaces.includes(raceIndex) ? "" : "_hidden"}`}>
             {raceIndex == isCurrentRace
               ? getState("textStrings").tournamentTab.now

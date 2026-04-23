@@ -5519,21 +5519,26 @@ body {
 		font-size: clamp(16px, 1vw, 32px);
 		letter-spacing: 0.13rem;
 
-
 		margin: 0px 0px 0px 5px;
 		justify-self: center;
 	}
 
 	&__race-status {
-		font-size: clamp(16px, 1vw, 32px);
+		font-size: clamp(14px, 1vw, 32px);
 		letter-spacing: 0.13rem;
 
-
+		overflow: visible;
 		font-weight: 700;
 		border-radius: 7px;
 		padding: 0px 10px;
 		justify-self: end;
-
+		// position: relative;
+		p {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			transform: translate(0%, -50%);
+		}
 	}
 
 	&__race-sub-tittles {
@@ -6153,6 +6158,7 @@ body {
 		font-size: 18px;
 		font-weight: 300;
 		position: relative;
+
 		@media(max-width:510px) {
 			font-size: 16px;
 		}
@@ -6194,9 +6200,11 @@ body {
 		text-shadow: 1px 1px 3px #000;
 		// height: 100%;
 		text-align: center;
+
 		@media(max-width:510px) {
 			font-size: 16px;
 		}
+
 		@media(max-width:767px) {
 			justify-self: start;
 			font-size: 16px;

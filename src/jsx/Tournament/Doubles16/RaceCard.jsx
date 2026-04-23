@@ -16,7 +16,7 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
       : DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase == "1/1"
       ? getState("textStrings").tournamentTab.final
       : DOUBLE_ELIM_GRIDS.horizontal?.[raceIndex]?.racePhase;
-		
+
   return (
     <>
       <div
@@ -27,13 +27,15 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
           <h3 className="tournament__race-num">{`${getState("textStrings").tournamentTab.race} ${raceIndex + 1}`}</h3>
           <h4 className="tournament__race-phase">{racePhaseText}</h4>
           <h2 className={`tournament__race-status ${activeRaces.includes(raceIndex) ? "" : "_hidden"}`}>
-            {raceIndex == isCurrentRace
-              ? getState("textStrings").tournamentTab.now
-              : raceIndex == isCompleteRace
-              ? getState("textStrings").tournamentTab.completed
-              : raceIndex == isNextRace
-              ? getState("textStrings").tournamentTab.next
-              : ""}
+            <p>
+              {raceIndex == isCurrentRace
+                ? getState("textStrings").tournamentTab.now
+                : raceIndex == isCompleteRace
+                ? getState("textStrings").tournamentTab.completed
+                : raceIndex == isNextRace
+                ? getState("textStrings").tournamentTab.next
+                : ""}
+            </p>
           </h2>
         </div>
         <div className="tournament__race-sub-tittles">

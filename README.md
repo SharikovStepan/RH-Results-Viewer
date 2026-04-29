@@ -1,65 +1,90 @@
-# RotorHazard Results Viewer
+[![English](https://img.shields.io/badge/English-blue?style=flat)](README.en.md)
 
-A static [web application](https://rh-results-viewer.vercel.app/) that visualizes lap timing data exported from RotorHazard's Results.json.
+# RH Results Viewer
 
-![Preview Screenshot](ImagesPreview/preview1.png)
-![Preview Screenshot](ImagesPreview/preview2.png)
-![Preview Screenshot](ImagesPreview/preview3.png)
+> Визуализация JSON Results данных из RotorHazard
 
+**Демо:** [rh-results-viewer.vercel.app](https://rh-results-viewer.vercel.app)
 
-## Features
-  - View top 5 best single laps and consecutive laps
-  - Real-time clock (RTC) timestamps for easy DVR recording lookup
-  - Individual pilot lap time graphs
-  - Head-to-head pilot comparison statistics
+Приложение для удобного просмотра результатов, записанных с помощью **RotorHazard**. Загрузите ваш `results.json` и получите наглядную статистику.
 
-## Live Demo
+---
 
-Access the live version hosted on Vercel:  
-[View Live Demo](https://rh-results-viewer.vercel.app/)
+## Вы сможете смотреть:
 
-## Project Background
+<details open>
+<summary><b>Статистику конкретного пилота</b></summary>
+<br>
+<img src="/previewGifs/pilotStat_ru.gif" alt="Статистика" width="600">
+</details>
 
-Developed as part of my web development learning journey, this project focuses on core web technologies:
+<details>
+<summary><b>Общий лидерборд</b></summary>
+<br>
+<img src="/previewGifs/leaderboard_ru.gif" alt="Лидерборд" width="600">
+</details>
 
-- HTML5
-- CSS3 (with SCSS preprocessing)
-- Vanilla JavaScript
+<details>
+<summary><b>Результаты раунда</b></summary>
+<br>
+<img src="/previewGifs/round_ru.gif" alt="Отдельный раунд" width="600">
+</details>
 
-Note: As a learning project, the codebase may not follow all enterprise-grade patterns.
+<details>
+<summary><b>Таблицу квалификаций</b></summary>
+<br>
+<img src="/previewGifs/quals_ru.gif" alt="Квалификации" width="600">
+</details>
 
-## How to Use
+<details>
+<summary><b>Сетку Double Elimination</b></summary>
+<br>
+<img src="/previewGifs/doubles_ru.gif" alt="Double Elimination" width="600">
+</details>
 
-1. Export your Results.json from RotorHazard
-2. Open the [application](https://rh-results-viewer.vercel.app/) in your browser
-3. Upload your results.json file in special form
-4. Explore your race statistics!
+---
 
-- OR
+## Три пути использования
 
-1. Find [Telegram Bot](https://t.me/results_jsons_uploader_bot)
-2. Send results.json with custom name in same message(example: WhoopMANIA Quals)
-3. Wait for the Bot to send notification about success and Date
-4. Find your event in calendar!
+### 1. Просмотр локального файла
 
-## Technical Details
+Зайдите на **[rh-results.vercel.app](https://rh-results-viewer.vercel.app)** и загрузите локально ваш экспортированный файл `results.json`. Данные обрабатываются только в вашем браузере.
 
-- client-side processing (no server backend)
-- Adaptive design (desktop & mobile compatible)
-- Lightweight (~354 KB total resources)
+- **Хотите потыкать прямо сейчас?** Посмотрите уже загруженный файл результатов реальной гонки [**ВУПОМАНИЯ**](https://rh-results-viewer.vercel.app/?uuid=gYjp3Rd0Rw6_FGT-iVBm9g).
 
-## Future Improvements
+### 2. Через Telegram-бота (экспериментально)
 
-- Live Timing Integration:
-  - Real-time data connection via RotorHazard plugin (similar to FPVScores)
-- Customization:
-  - Adjustable number of displayed best laps (currently fixed at 5)
+Отправьте ваш `results.json` в телеграм-бота, чтобы сохранить событие в общем календаре и получить постоянную ссылку на результаты.
 
-## Contributing
+> ⚠️ **Данный способ пока не автоматизирован.** Все вопросы задавайте сюда: [Telegram](https://t.me/sharikov_stepan)
 
-While primarily an educational project, constructive feedback and suggestions are welcome!  
-Feel free to contact me with any ideas.
+### 3. Плагин для RotorHazard (Результаты в реальном времени)
 
-## License
+Установите **[плагин для RotorHazard](https://github.com/SharikovStepan/rv-live)**. Именно этот вариант дает возможность отображать **турнирные сетки** и **таблицы квалификаций** в реальном времени прямо во время ивента.
+Это позволяет пилотам следить за ходом соревнования со своего смартфона, а организаторам — вывести результаты для зрителей на большой экран.
+
+---
+
+## Технологии
+
+- **Язык:** Vanilla JavaScript (ES6+) — логика и интерфейс
+- **Спец. модули:** React + Motion — используются для рендера турнирных сеток
+- **Стили:** SCSS(Sass)
+- **Сборка:** Vite
+
+---
+
+## Лицензия
 
 [MIT](LICENSE)
+
+---
+
+## Контакты
+
+По всем вопросам, предложениям и багрепортам:
+
+- **Telegram:** [@sharikov_stepan](https://t.me/sharikov_stepan)
+- **Email:** Stepkoy@live.com
+
+---

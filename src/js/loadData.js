@@ -12,8 +12,8 @@ export async function urlUpload() {
 
     setState("mainObj", fullLiveData.results);
     setState("fullRHData", fullLiveData);
-    setState("finalTypesByClass", fullLiveData.finalTypesByClass);
-    const raceClassesWithFinals = fullLiveData.finalTypesByClass?.filter((raceClass) => raceClass.finalType != "");
+    setState("raceTypesByClass", fullLiveData.raceTypesByClass);
+    const raceClassesWithFinals = fullLiveData.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     setState(
       "raceClassesWithFinals",
       raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId)||[]
@@ -194,8 +194,8 @@ export async function loadLastFile() {
 
     setState("mainObj", fullResponse.data.results);
     setState("fullRHData", fullResponse.data);
-    setState("finalTypesByClass", fullResponse.data.finalTypesByClass);
-    const raceClassesWithFinals = fullResponse.data.finalTypesByClass?.filter((raceClass) => raceClass.finalType != "");
+    setState("raceTypesByClass", fullResponse.data.raceTypesByClass);
+    const raceClassesWithFinals = fullResponse.data.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     setState(
       "raceClassesWithFinals",
       raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId)
@@ -244,8 +244,8 @@ export async function loadDateFile(uuid) {
     const fullResponse = await data.json();
     setState("mainObj", fullResponse.data.results);
     setState("fullRHData", fullResponse.data);
-    setState("finalTypesByClass", fullResponse.data.finalTypesByClass);
-    const raceClassesWithFinals = fullResponse.data.finalTypesByClass?.filter((raceClass) => raceClass.finalType != "");
+    setState("raceTypesByClass", fullResponse.data.raceTypesByClass);
+    const raceClassesWithFinals = fullResponse.data.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     setState(
       "raceClassesWithFinals",
       raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId)

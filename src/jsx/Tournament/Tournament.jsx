@@ -36,7 +36,7 @@ function Tournament({ fullRHData, currentClass }) {
 
   //   const [activeTabId, setActiveTabId] = useState(1);
 
-  const tournamentTypeInfo = fullData.finalTypesByClass.find((type) => type.raceClassId == raceClass);
+  const raceTypeInfo = fullData.raceTypesByClass.find((type) => type.raceClassId == raceClass);
 
   const results = fullData.results;
 
@@ -148,7 +148,7 @@ function Tournament({ fullRHData, currentClass }) {
     })
     .flat();
 
-  if (tournamentTypeInfo.finalType == "double16") {
+  if (raceTypeInfo.raceType == "double16") {
     //собираем массив всех выполненных гонок
     const races = getResultRaces(roundsWithResults, allSlots);
 
@@ -176,7 +176,7 @@ function Tournament({ fullRHData, currentClass }) {
   }
 
   //If QUALS!!!
-  if (tournamentTypeInfo.finalType == "quals") {
+  if (raceTypeInfo.raceType == "quals") {
     const pilotsLeaderboard = [];
 
     const qualsLandmarks = fullData.quals?.landmarks || [];
@@ -368,9 +368,9 @@ function Tournament({ fullRHData, currentClass }) {
           <h2 className="tournament__event-name">{fullData.eventName}</h2>
           <h3 className="tournament__final-name">{fullData.results.classes[raceClass].name}</h3>
         </div> */}
-        {tournamentTypeInfo.finalType == "double16" && <Doubles16 raceData={raceInfo} qualsPlaces={[{ id: 1, place: 4 }]} channelsAndColors={channelsAndColors} />}
+        {raceTypeInfo.raceType == "double16" && <Doubles16 raceData={raceInfo} qualsPlaces={[{ id: 1, place: 4 }]} channelsAndColors={channelsAndColors} />}
 
-        {tournamentTypeInfo.finalType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
+        {raceTypeInfo.raceType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
       </div>
     </>
   );

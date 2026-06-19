@@ -26,7 +26,7 @@ const states = {
   tournamentRaceQuantity: 14,
   tournamentPilotsPerHeat: 4,
   tournamentQualsType: "fastest_lap",
-  finalTypesByClass: [],
+  raceTypesByClass: [],
   fullRHData: {},
   raceClassesWithFinals: [],
   reactRoot: null,

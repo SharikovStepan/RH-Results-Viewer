@@ -64,8 +64,8 @@ async function refreshData(isTournament) {
   setState("mainObj", freshData.results);
   setState("liveTimestamp", freshData.lastUpdate);
   setState("fullRHData", freshData);
-  setState("finalTypesByClass", freshData.finalTypesByClass);
-  const raceClassesWithFinals = freshData.finalTypesByClass.filter((raceClass) => raceClass.finalType != "");
+  setState("raceTypesByClass", freshData.raceTypesByClass);
+  const raceClassesWithFinals = freshData.raceTypesByClass.filter((raceClass) => raceClass.raceType != "");
   setState(
     "raceClassesWithFinals",
     raceClassesWithFinals.map((raceClass) => raceClass.raceClassId)

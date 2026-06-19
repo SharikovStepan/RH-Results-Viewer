@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import QualsResults from "./QualsResults";
 import QualsTable from "./QualsTable";
 import { getState } from "../../../js/sharedStates";
-function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
+function Quals({ qualsInfo, qualsLeaderboard }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState(null);
   console.log("qualsInfoqualsInfo", qualsInfo);
@@ -49,7 +49,7 @@ function Quals({ qualsInfo, qualsLeaderboard, channelsAndColors }) {
           {getState("textStrings").tournamentTab.results}
         </button>
       </div>
-      {activeTab == "table" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId} channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} />}
+      {activeTab == "table" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId}  qualsInfo={qualsInfo} />}
       {activeTab == "results" && <QualsResults getPilotId={getPilotId} activePilotId={activePilotId} qualsLeaderboard={qualsLeaderboard} />}
     </>
   );

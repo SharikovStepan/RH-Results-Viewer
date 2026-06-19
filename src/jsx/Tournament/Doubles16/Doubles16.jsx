@@ -3,7 +3,7 @@ import Doubles16TableHorizontal from "./Doubles16TableHorizontal";
 import Doubles16TableVertical from "./Doubles16TableVertical";
 import Doubles16Results from "./Doubles16Results";
 import { getState } from "../../../js/sharedStates";
-function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
+function Doubles16({ raceData }) {
   const [activeTab, setActiveTab] = useState("");
   const [activePilotId, setActivePilotId] = useState("-");
 
@@ -31,7 +31,7 @@ function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
   };
 
   const getPilotId = (e) => {
-    const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id")
+    const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id");
 
     if (id == activePilotId) {
       setActivePilotId("-");
@@ -61,11 +61,11 @@ function Doubles16({ raceData, qualsPlaces, channelsAndColors }) {
 
       {activeTab == "table" &&
         (isMobile ? (
-          <Doubles16TableVertical activePilotId={activePilotId} channelsAndColors={channelsAndColors} raceData={raceData} getPilotId={getPilotId} />
+          <Doubles16TableVertical activePilotId={activePilotId} raceData={raceData} getPilotId={getPilotId} />
         ) : (
-          <Doubles16TableHorizontal activePilotId={activePilotId} channelsAndColors={channelsAndColors} raceData={raceData} getPilotId={getPilotId} />
+          <Doubles16TableHorizontal activePilotId={activePilotId} raceData={raceData} getPilotId={getPilotId} />
         ))}
-      {activeTab == "results" && <Doubles16Results activePilotId={activePilotId} qualsPlaces={qualsPlaces} raceData={raceData} getPilotId={getPilotId} />}
+      {activeTab == "results" && <Doubles16Results activePilotId={activePilotId}  raceData={raceData} getPilotId={getPilotId} />}
     </>
   );
 }

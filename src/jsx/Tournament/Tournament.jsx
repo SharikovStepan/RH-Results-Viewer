@@ -42,6 +42,8 @@ function Tournament({ fullRHData, currentClass }) {
 
   const channelsAndColors = getChannelsAndColors(fullData.channels, COLORS);
 
+  console.log("channelsAndColors", channelsAndColors);
+
   const roundsQuantity = getState("tournamentRoundsQuantity");
   const finalRoundsQuantity = getState("tournamentFinalRoundsQuantity");
   const raceQuantity = getState("tournamentRaceQuantity");
@@ -317,6 +319,7 @@ function Tournament({ fullRHData, currentClass }) {
       }
     });
     //  console.log("withPlace", withPlace);
+    //  console.log("qualsLeaderboard", qualsLeaderboard);
 
     qualsLeaderboard = withPlace;
     qualsInfo = qualsFullInfo;
@@ -368,9 +371,9 @@ function Tournament({ fullRHData, currentClass }) {
           <h2 className="tournament__event-name">{fullData.eventName}</h2>
           <h3 className="tournament__final-name">{fullData.results.classes[raceClass].name}</h3>
         </div> */}
-        {raceTypeInfo.raceType == "double16" && <Doubles16 raceData={raceInfo} qualsPlaces={[{ id: 1, place: 4 }]} channelsAndColors={channelsAndColors} />}
+        {raceTypeInfo.raceType == "double16" && <Doubles16 raceData={raceInfo} />}
 
-        {raceTypeInfo.raceType == "quals" && <Quals channelsAndColors={channelsAndColors} qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
+        {raceTypeInfo.raceType == "quals" && <Quals qualsInfo={qualsInfo} qualsLeaderboard={qualsLeaderboard} />}
       </div>
     </>
   );

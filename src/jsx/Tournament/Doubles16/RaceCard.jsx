@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
-import { DOUBLE_ELIM_GRIDS } from "./const";
+import { COLORS, DOUBLE_ELIM_GRIDS } from "./const";
 import ChannelAndColor from "../../ChannelAndColor";
 import { getState } from "../../../js/sharedStates";
 
-function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, pilotButton, activePilotId, doubleElimLows, activeRaces, pilotsQuantity }) {
+function RaceCard({ raceData, raceIndex, gridPositionsData, pilotButton, activePilotId, doubleElimLows, activeRaces, pilotsQuantity }) {
   const [isCurrentRace, isCompleteRace, isNextRace] = activeRaces || [];
 
   const raceNum = raceData.raceNum;
@@ -48,10 +48,11 @@ function RaceCard({ channelsAndColors, raceData, raceIndex, gridPositionsData, p
             if (index >= pilotsQuantity && !pilotData.id) return null;
             const pilotInfo = raceData.pilotsNames.find((pilot) => pilot.id == pilotData.id);
             const nodeIndex = pilotInfo?.nodeIndex;
-            const channelData = channelsAndColors.find((node) => node.nodeIndex == nodeIndex);
             const pilotName = pilotInfo?.name;
 
             const pilotPlace = pilotData.place;
+
+            const channelData = { channel: pilotInfo?.channel, color: COLORS[nodeIndex] };
 
             return (
               <motion.div

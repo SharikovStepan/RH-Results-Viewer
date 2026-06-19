@@ -1,8 +1,9 @@
 import ChannelAndColor from "../../ChannelAndColor";
 import React from "react";
 import { getState } from "../../../js/sharedStates";
+import { COLORS } from "../const";
 
-function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId }) {
+function QualsTable({ qualsInfo, getPilotId, activePilotId }) {
   const handleClsick = (e) => {
     getPilotId(e);
   };
@@ -31,10 +32,12 @@ function QualsTable({ channelsAndColors, qualsInfo, getPilotId, activePilotId })
                   <div className="quals__pilots-stats">
                     <div className="quals__pilots-names" style={{ gridTemplateRows: `repeat(${pilotsQuantity},1fr)` }}>
                       {pilots.map((pilot) => {
+                        console.log("pilots", pilots);
+
                         const nodeIndex = pilot.nodeIndex;
                         const pilotName = pilot.callsign;
                         const pilotId = pilot.id;
-                        const channelData = channelsAndColors.find((node) => node.nodeIndex == nodeIndex);
+                        const channelData = { channel: pilot?.channel, color: COLORS[nodeIndex] };
 
                         return (
                           <div pilot-id={pilotId} onClick={handleClsick} key={`${pilotName}-${pilotId}`} className={`quals__pilot-name _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>

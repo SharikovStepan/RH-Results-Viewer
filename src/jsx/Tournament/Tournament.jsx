@@ -69,7 +69,7 @@ function Tournament({ fullRHData, currentClass }) {
   const deletedRounds = fullData.deletedRounds;
   const deletedRoundsInHeats = deletedRounds.filter((data) => heatsNumSorted.includes(data.heatId));
 
-  const allSlots = fullData.noResultsHeats.filter((heat) => heat.classId == raceClass);
+  const allSlots = fullData.allSlots.filter((heat) => heat.classId == raceClass);
 
   const noResultsHeats = allSlots
     .filter((slot) => {
@@ -157,7 +157,7 @@ function Tournament({ fullRHData, currentClass }) {
 
     //Здесь счет каждой гонки, уже не раунда
     const racesWithScore = setRaceScores(raceWithDuels, pilotsPerHeat);
-   //  console.log("racesWithScoreracesWithScore", racesWithScore);
+    //  console.log("racesWithScoreracesWithScore", racesWithScore);
 
     //ставим статус complete и проверяем последнюю гонку, complete она или нет
     const racesWithStatus = setRaceStatus(racesWithScore, raceQuantity, roundsQuantity, finalRoundsQuantity, pilotsPerHeat, PLACE_TABLE_RACES);
@@ -316,7 +316,7 @@ function Tournament({ fullRHData, currentClass }) {
         return { ...pilotInfo, place: pilotPlace };
       }
     });
-   //  console.log("withPlace", withPlace);
+    //  console.log("withPlace", withPlace);
 
     qualsLeaderboard = withPlace;
     qualsInfo = qualsFullInfo;

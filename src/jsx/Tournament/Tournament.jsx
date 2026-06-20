@@ -71,9 +71,9 @@ function Tournament({ fullRHData, currentClass }) {
   const deletedRounds = fullData.deletedRounds;
   const deletedRoundsInHeats = deletedRounds.filter((data) => heatsNumSorted.includes(data.heatId));
 
-  const allSlots = fullData.allSlots.filter((heat) => heat.classId == raceClass);
+  const heatSlots = fullData.heatSlots.filter((heat) => heat.classId == raceClass);
 
-  const noResultsHeats = allSlots
+  const noResultsHeats = heatSlots
     .filter((slot) => {
       if (slot.isResults == false) {
         return true;
@@ -152,7 +152,7 @@ function Tournament({ fullRHData, currentClass }) {
 
   if (raceTypeInfo.raceType == "double16") {
     //собираем массив всех выполненных гонок
-    const races = getResultRaces(roundsWithResults, allSlots);
+    const races = getResultRaces(roundsWithResults, heatSlots);
 
     //Ставим баллы за дуэли, если они есть
     const raceWithDuels = setDuelPlaces(races, raceQuantity, roundsQuantity, finalRoundsQuantity);
@@ -189,13 +189,13 @@ function Tournament({ fullRHData, currentClass }) {
 
     const qualsQuantity = fullData.quals?.quantity ? fullData.quals.quantity : getState("qualsQuantity");
 
-    const qualSlots = allSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
+    const qualSlots = heatSlots.filter((slot) => !duplicateIds?.includes(slot.heatId));
 
     const qualsSlotsFull = qualSlots.map((slot) => {
       if (duplicatedHeatsId?.includes(slot.heatId)) {
         const duplicatedInfo = duplicatedHeatsData.filter((duplicatedHeat) => duplicatedHeat.heatId == slot.heatId);
         const duplicatedIds = duplicatedInfo.map((dupl) => dupl.duplicateId);
-        const lastSlotInfo = allSlots.find((slot) => slot.heatId == duplicatedIds[duplicatedIds.length - 1]);
+        const lastSlotInfo = heatSlots.find((slot) => slot.heatId == duplicatedIds[duplicatedIds.length - 1]);
         return { ...slot, pilots: lastSlotInfo.pilots, duplicateHeats: duplicatedIds };
       } else {
         return { ...slot, duplicateHeats: false };

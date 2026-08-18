@@ -52,7 +52,7 @@ function RaceCard({ raceData, raceIndex, gridPositionsData, pilotButton, activeP
 
             const pilotPlace = pilotData.place;
 
-            const channelData = { channel: pilotInfo?.channel, color: COLORS[nodeIndex] };
+            const channelData = { channel: pilotInfo?.channel, color: pilotInfo?.color || COLORS[nodeIndex] };
 
             return (
               <motion.div

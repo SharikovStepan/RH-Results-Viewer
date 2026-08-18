@@ -37,7 +37,7 @@ function QualsTable({ qualsInfo, getPilotId, activePilotId }) {
                         const nodeIndex = pilot.nodeIndex;
                         const pilotName = pilot.callsign;
                         const pilotId = pilot.id;
-                        const channelData = { channel: pilot?.channel, color: COLORS[nodeIndex] };
+                        const channelData = { channel: pilot?.channel, color: pilot?.color || COLORS[nodeIndex] };
 
                         return (
                           <div pilot-id={pilotId} onClick={handleClsick} key={`${pilotName}-${pilotId}`} className={`quals__pilot-name _pilot-button ${activePilotId == pilotId ? "_active" : ""}`}>

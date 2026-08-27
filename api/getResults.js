@@ -4,7 +4,7 @@ const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   //   res.setHeader("Access-Control-Allow-Origin", "https://rh-results-viewer.vercel.app/");
-  res.setHeader("Access-Control-Allow-Origin", "*"); 
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
 
   if (req.method === "OPTIONS") {
@@ -137,7 +137,7 @@ export default async function handler(req, res) {
 
       const results = file.data.results;
 
-      return { eventName, metaName, date, raceTypesByClassId };
+      return { eventName, date, raceTypesByClassId, results };
     });
 
     //  const data = typeof redisResponse === "string" ? JSON.parse(redisResponse) : redisResponse;

@@ -67,20 +67,22 @@ export default async function handler(req, res) {
     try {
       const { uuid, eventStart, lastUpdate } = req.body.changeDate;
 
-      const raw = await redis.get(uuid);
+const raw = await redis.get(uuid);
 
-      if (!raw) {
-        return res.status(404).json({
-          ok: false,
-          message: "UUID not found",
-        });
-      }
+if (!raw) {
+  return res.status(404).json({
+    ok: false,
+    message: "UUID not found",
+  });
+}
 
-      const file = JSON.parse(raw);
+// Upstash может вернуть уже объект
+const file = typeof raw === "string" ? JSON.parse(raw) : raw;
 
-      file.data.lastUpdate = lastUpdate;
+file.data.lastUpdate = lastUpdate;
 
-      await redis.set(uuid, JSON.stringify(file));
+// сохраняем объект обратно
+await redis.set(uuid, file);
 
       const filesRaw = await redis.get("FILES");
       const files = Array.isArray(filesRaw) ? filesRaw : [];

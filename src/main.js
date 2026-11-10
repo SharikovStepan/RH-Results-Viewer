@@ -59,6 +59,9 @@ document.querySelector(".date-files__items").addEventListener("click", function 
   if (e.target.closest(".file__item")) {
     const fileItemElement = e.target.closest(".file__item");
 
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+
     const fileName = fileItemElement.id;
     const dateFileElements = document.querySelectorAll(".file__item");
 
@@ -74,8 +77,15 @@ document.querySelector(".date-files__items").addEventListener("click", function 
 });
 
 //////////////////////////////////////////
-document.querySelector(".last-file__item").addEventListener("click", function () {
+document.querySelector(".last-file__item").addEventListener("click", function (e) {
   document.querySelector(".last-file__item").classList.add("_active");
+
+  if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
+    document.querySelector(".last-file__item").classList.remove("_active");
+    return;
+  }
+  e.preventDefault();
+
   loadLastFile();
 });
 

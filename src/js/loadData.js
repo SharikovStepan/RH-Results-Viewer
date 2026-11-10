@@ -154,6 +154,8 @@ export async function loadFilesList(calendar) {
 
       document.querySelector(".last-file__file-name-value").innerHTML = latestFile.eventName;
 
+      document.querySelector(".last-file__item")?.setAttribute("href", `?uuid=${latestFile?.uuid || null}`);
+
       if (latestFile.date == latestFile.lastUpdate) {
         document.querySelector(".last-file__date-value").innerHTML = getState("textStrings").emptyTime;
         document.querySelector(".last-file__time-value").innerHTML = getState("textStrings").emptyTime;

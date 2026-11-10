@@ -57,7 +57,7 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
 
   const handleClick = (e) => getPilotId(e);
 
-  const roundsText = getState("textStrings")?.tournamentTab?.rounds ?? "Раунд";
+  const roundsText = getState("textStrings")?.tournamentTab?.round ?? "Раунд";
   const roundLabel = `${roundsText} ${activeRound1Based}`;
 
   const prevDisabled = activeRound1Based <= 1;
@@ -136,7 +136,7 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
                 <div className="quals__group">
                   <div className="quals__tittles">
                     <div className="quals__heat-name">{heatName}</div>
-                    <div className="quals__rounds-tittle">{getState("textStrings").tournamentTab.rounds}</div>
+                    <div className="quals__rounds-tittle">{getState("textStrings").tournamentTab.time}</div>
                     <div className="quals__round-num" style={{ gridTemplateColumns: `repeat(${roundsArr.length},1fr)` }}>
                       {roundsArr.map((round, index) => (
                         <p key={`${qualHeat.heatId}-round-${index}`} className={index === activeRoundIdx ? "_active" : ""}>

@@ -532,7 +532,7 @@ export function getDayFiles(date) {
 
       if (date == fileDateArr) {
         const fileItemElement = {
-          item: document.createElement("div"),
+          item: document.createElement("a"),
           name: document.createElement("div"),
           nameTittle: document.createElement("div"),
           nameValue: document.createElement("div"),
@@ -545,6 +545,7 @@ export function getDayFiles(date) {
         };
 
         fileItemElement.item.classList.add("file__item", "pseudo-button");
+        fileItemElement.item.setAttribute("href", `?uuid=${file.uuid}`);
         fileItemElement.item.id = file.uuid;
         fileItemElement.name.classList.add("file__file-name");
         fileItemElement.nameTittle.classList.add("file__file-name-tittle");

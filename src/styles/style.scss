@@ -5766,6 +5766,12 @@ body {
 	}
 }
 
+// .tournament__tab-anim-wrapper {
+// 	position: relative;
+// 	overflow: hidden;
+// 	padding: 20px 10px;
+// 	margin: -20px -10px;
+// }
 
 .quals {
 	color: $color-grey;
@@ -5773,6 +5779,7 @@ body {
 
 
 	&._vertical {
+		margin-top: 20px;
 
 		.quals__tittles {
 			grid-template-columns: 2fr 1fr;
@@ -6083,7 +6090,7 @@ body {
 .quals__floating-buttons {
 	position: fixed;
 	left: 50%;
-	bottom: 20px;
+	bottom: 34px;
 	// transform: translateX(-50%);
 	z-index: 50;
 	// Обёртка невидима — фон/бордер/паддинги не добавляем.
@@ -6091,6 +6098,11 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	@media(max-width:510px) {
+		bottom: 34px;
+
+	}
 
 	._buttons-wrapper {
 		border-radius: 8px;
@@ -6897,11 +6909,11 @@ body {
 		// Компенсируем обрезку теней внутренним padding:
 		overflow: hidden;
 		padding: 30px 20px;
-		margin: -30px -20px;
+		margin: 0px -20px -30px -20px;
 
 		@media(max-width:510px) {
 			padding: 10px 5px;
-			margin: -10px -5px;
+			margin: 5px -5px -10px -5px;
 
 		}
 	}
@@ -6993,8 +7005,8 @@ body {
 
 		@media (max-width: 510px) {
 			font-size: 16px;
-			height: 30px;
-			width: 60px;
+			height: 34px;
+			width: 80px;
 		}
 	}
 

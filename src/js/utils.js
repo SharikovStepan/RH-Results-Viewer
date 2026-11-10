@@ -257,7 +257,7 @@ export function arraysEqual(arr1, arr2) {
 }
 
 export function updateUrl(key, value, replace = false) {
-  const order = ["uuid", "raceclass", "main", "leaderboard", "quals", "doubles16", "phase"];
+  const order = ["uuid", "raceclass", "main", "leaderboard", "bracket", "phase"];
 
   const url = new URL(window.location);
   const uuidParam = url.searchParams.get("uuid");
@@ -265,8 +265,11 @@ export function updateUrl(key, value, replace = false) {
   const classRaceParam = url.searchParams.get("raceclass");
   const mainTabParam = url.searchParams.get("main");
   const leaderboardTypeParam = url.searchParams.get("leaderboard");
-  const qualsTypeParams = url.searchParams.get("quals");
-  const doubles16TypeParams = url.searchParams.get("doubles16");
+  const qualsTypeParams = url.searchParams.get("bracket");
+
+  //   const qualsTypeParams = url.searchParams.get("quals");
+  //   const doubles16TypeParams = url.searchParams.get("doubles16");
+
   const phaseParams = url.searchParams.get("phase");
 
   const searchParams = new URLSearchParams();
@@ -275,8 +278,9 @@ export function updateUrl(key, value, replace = false) {
   classRaceParam && searchParams.set("raceclass", classRaceParam);
   mainTabParam && searchParams.set("main", mainTabParam);
   leaderboardTypeParam && searchParams.set("leaderboard", leaderboardTypeParam);
-  qualsTypeParams && searchParams.set("quals", qualsTypeParams);
-  doubles16TypeParams && searchParams.set("doubles16", doubles16TypeParams);
+  qualsTypeParams && searchParams.set("bracket", qualsTypeParams);
+  //   qualsTypeParams && searchParams.set("quals", qualsTypeParams);
+  //   doubles16TypeParams && searchParams.set("doubles16", doubles16TypeParams);
   phaseParams && searchParams.set("phase", phaseParams);
 
   //   if (!leaderboardTypeParam) {

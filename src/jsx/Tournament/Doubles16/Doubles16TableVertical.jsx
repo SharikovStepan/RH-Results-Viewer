@@ -22,11 +22,11 @@ function Doubles16TableVertical({ bracketData, getPilotId, activePilotId, config
   const prevPhase = PHASES[activeIndex - 1];
   const nextPhase = PHASES[activeIndex + 1];
 
-//   const switchPhase = (phase, dir) => {
-//     if (!phase) return;
-//     setDirection(dir);
-//     setActivePhase(phase);
-//   };
+  //   const switchPhase = (phase, dir) => {
+  //     if (!phase) return;
+  //     setDirection(dir);
+  //     setActivePhase(phase);
+  //   };
 
   const racesOfPhase = bracketData.map((race, index) => ({ race, grid: DOUBLE16_GRID_DATA.vertical[index], index })).filter(({ grid }) => grid && grid.racePhase === activePhase);
 
@@ -52,16 +52,31 @@ function Doubles16TableVertical({ bracketData, getPilotId, activePilotId, config
         <button
           type="button"
           className={`_button finals-bracket__button ${!prevPhase ? "_disabled" : ""}`}
-          onClick={() => switchPhase(prevPhase)}
+          onClick={() => switchPhase(prevPhase, -1)}
           aria-label={prevPhaseLabel || "Предыдущая фаза"}
           disabled={!prevPhase}>
           {"<"}
         </button>
-        <span className="finals-bracket__phase-name">{activePhaseLabel}</span>
+        {/* <span className="finals-bracket__phase-name">{activePhaseLabel}</span> */}
+        <span className="finals-bracket__phase-name">
+          <AnimatePresence mode="wait" custom={direction} initial={false}>
+            <motion.span
+              key={activePhase}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              style={{ display: "inline-block" }}>
+              {activePhaseLabel}
+            </motion.span>
+          </AnimatePresence>
+        </span>
         <button
           type="button"
           className={`_button finals-bracket__button ${!nextPhase ? "_disabled" : ""}`}
-          onClick={() => switchPhase(nextPhase)}
+          onClick={() => switchPhase(nextPhase, 1)}
           aria-label={nextPhaseLabel || "Следующая фаза"}
           disabled={!nextPhase}>
           {">"}

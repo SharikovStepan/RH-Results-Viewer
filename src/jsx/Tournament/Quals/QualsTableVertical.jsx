@@ -73,7 +73,22 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
         aria-label="Предыдущий раунд">
         {"<"}
       </button>
-      <span className="finals-bracket__phase-name">{roundLabel}</span>
+      {/* <span className="finals-bracket__phase-name">{roundLabel}</span> */}
+      <span className="finals-bracket__phase-name">
+        <AnimatePresence mode="wait" custom={direction} initial={false}>
+          <motion.span
+            key={activeRound1Based}
+            custom={direction}
+            variants={timeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.22, ease: "easeInOut" }}
+            style={{ display: "inline-block" }}>
+            {roundLabel}
+          </motion.span>
+        </AnimatePresence>
+      </span>
       <button
         type="button"
         className={`_button finals-bracket__button ${nextDisabled ? "_disabled" : ""}`}
@@ -87,14 +102,8 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
 
   return (
     <>
-      {/* маячок для отслеживания скролла — стоит прямо над inline-кнопками */}
-      <div ref={sentinelRef} aria-hidden="true" style={{ height: 1, width: "100%" }} />
-
-      {/* inline-кнопки */}
       {renderButtons()}
 
-      {/* floating-кнопки внизу viewport — портал в document.body,
-          чтобы position: fixed считался от viewport, а не от .tab с transform */}
       {createPortal(
         <AnimatePresence>
           {showFloating && (
@@ -111,6 +120,7 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
         </AnimatePresence>,
         document.body,
       )}
+      <div ref={sentinelRef} aria-hidden="true" style={{ height: 1, width: "100%" }} />
 
       <div className="quals _vertical">
         <div className="quals__container">

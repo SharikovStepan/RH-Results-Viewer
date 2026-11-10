@@ -5532,6 +5532,7 @@ body {
 		border-radius: 7px;
 		padding: 0px 10px;
 		justify-self: end;
+
 		// position: relative;
 		p {
 			position: absolute;
@@ -5770,6 +5771,60 @@ body {
 	color: $color-grey;
 
 
+
+	&._vertical {
+
+		.quals__tittles {
+			grid-template-columns: 2fr 1fr;
+
+			@media (max-width: 510px) {
+				grid-template-columns: minmax(100px, 2fr) 1fr;
+			}
+		}
+
+		.quals__pilots-stats {
+			grid-template-columns: 2fr 1fr;
+
+			@media (max-width: 510px) {
+				grid-template-columns: minmax(100px, 2fr) 1fr;
+			}
+
+		}
+
+		.quals__pilots-times {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.quals__pilot-time {
+
+			&::before,
+			&::after {
+				display: none !important;
+			}
+		}
+
+		.quals__pilot-times {
+			&:not(:last-child):before {
+				content: '';
+				position: absolute;
+				bottom: 0px;
+				left: 50%;
+				width: 90%;
+				transform: translate(-50%, 0);
+				height: 1px;
+				background-color: $color-stat-stroke;
+			}
+		}
+
+		.quals__round-num p._active {
+			color: $color-akcent2;
+			font-weight: 700;
+		}
+	}
+
+
+
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -5839,7 +5894,7 @@ body {
 		display: grid;
 		border: 1px solid $color-akcent1;
 		border-radius: 5px;
-		padding: 6px;
+		// padding: 6px;
 		justify-items: center;
 		align-items: center;
 
@@ -5892,7 +5947,7 @@ body {
 	&__pilot-name {
 		// background-color: $color-akcent1;
 		border: 1px solid $color-akcent2;
-		box-shadow: 0px 0px 7px $color-akcent2 inset;
+		box-shadow: 0px 0px 5px $color-akcent2 inset;
 		// color: $color-dark;
 		border-radius: 4px;
 		width: 100%;
@@ -5941,6 +5996,7 @@ body {
 		// padding: 0px 6px;
 		justify-items: center;
 		align-items: center;
+
 
 		&:not(:last-child):before {
 			content: '';
@@ -6024,6 +6080,35 @@ body {
 	}
 }
 
+.quals__floating-buttons {
+	position: fixed;
+	left: 50%;
+	bottom: 20px;
+	// transform: translateX(-50%);
+	z-index: 50;
+	// Обёртка невидима — фон/бордер/паддинги не добавляем.
+	pointer-events: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	._buttons-wrapper {
+		border-radius: 8px;
+		box-shadow: 0px 0px 40px $color-back inset, 0px 0px 10px $color-back;
+
+	}
+
+	span {
+		opacity: 0.3;
+	}
+
+	// Кликабельны только кнопки внутри
+	>* {
+		pointer-events: auto;
+	}
+}
+
+
 .quals-results {
 
 	&__container {
@@ -6039,6 +6124,7 @@ body {
 		flex-direction: column;
 		align-items: center;
 		width: 80%;
+		max-width: 600px;
 		box-shadow: 0px 0px 10px $color-akcent2 inset;
 		color: $color-grey;
 		margin: 0px 0px 10px 0px;
@@ -6412,6 +6498,628 @@ body {
 		}
 	}
 }
+
+
+
+
+
+.finals-bracket__race {
+	position: relative;
+	padding: 10px;
+	width: 100%;
+	border-radius: 8px;
+	border: 1px solid $color-akcent2;
+	box-shadow: 0px 0px 0px $color-back inset, 0px 0px 15px #000;
+	display: flex;
+	flex-direction: column;
+	transition: all 1s ease-out;
+	letter-spacing: clamp(0.1px, 0.03vw, 3px);
+	background-color: var(--color-dark);
+
+	&._low-table {
+		border: 1px solid $color-akcent1;
+	}
+
+	._loser {
+		background-color: rgba(25, 25, 25, 0.478);
+		color: rgba(79, 79, 79, 0.86);
+	}
+
+
+	._toLowerBracket {
+		background-color: rgba(83, 5, 5, 0.468);
+	}
+
+
+
+
+
+
+	&._wrong {
+		border: 1px solid #f70;
+		box-shadow: 0px 0px 20px #f70 inset;
+		opacity: 0.8;
+	}
+
+
+	// &._low-table {
+	// 	border: 1px solid $color-akcent1;
+	// }
+
+
+	&._current {
+		box-shadow: 0px 0px 10px $color-akcent2 inset, 0px 0px 15px $color-akcent2;
+	}
+
+
+	&._next {
+		box-shadow: 0px 0px 10px $color-grey inset, 0px 0px 15px $color-grey;
+	}
+}
+
+
+.finals-bracket__race-tittles {
+	position: relative;
+	margin: 0px 0px 5px 0px;
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	align-items: center;
+
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 100%;
+		height: 1px;
+		background-color: $color-stat-stroke;
+	}
+}
+
+
+.finals-bracket__race-num {
+	font-size: clamp(12px, 0.9vw, 22px);
+	letter-spacing: 0.13rem;
+	margin: 0px 0px 0px 5px;
+	justify-self: start;
+	text-wrap: nowrap;
+	overflow: visible;
+}
+
+
+.finals-bracket__race-phase {
+	font-size: clamp(12px, 0.9vw, 22px);
+	letter-spacing: 0.13rem;
+	margin: 0px 0px 0px 3px;
+	justify-self: center;
+}
+
+
+.finals-bracket__race-status {
+	font-size: clamp(14px, 1vw, 32px);
+	letter-spacing: 0.13rem;
+	overflow: visible;
+	font-weight: 700;
+	border-radius: 7px;
+	padding: 0px 10px;
+	justify-self: end;
+
+
+	p {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		transform: translate(0%, -50%);
+	}
+}
+
+
+._race-status-border {
+	border: 1px solid $color-akcent2;
+	border-radius: 4px;
+	padding: 0px 14px 0px 14px;
+	box-shadow: 0px 0px 2px $color-akcent2 inset, 0px 0px 6px $color-akcent2;
+}
+
+
+
+
+.finals-bracket__race-sub-tittles {
+	font-size: 16px;
+	display: grid;
+	grid-template-columns: 1.6fr 1fr 0.35fr;
+	align-items: end;
+	justify-items: center;
+	margin: 0px 0px 3px 0px;
+	color: $color-stat-frame;
+}
+
+
+.finals-bracket__race-name-tittle {
+	justify-self: start;
+	margin: 0px 0px 0px 5px;
+}
+
+
+.finals-bracket__race-strokes {
+	display: grid;
+	gap: 5px;
+	height: 100%;
+}
+
+
+.finals-bracket__pilot-items {
+	display: grid;
+	grid-template-columns: 1.6fr 1fr 0.35fr;
+	align-items: stretch;
+	gap: 10px;
+	height: auto;
+	position: relative;
+	transition: opacity 0.4s ease;
+
+
+	&._no-fly {
+		opacity: 0.2;
+	}
+}
+
+
+.finals-bracket__pilot-name {
+	min-width: 0;
+	min-height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+
+
+	p:nth-child(1) {
+		position: relative;
+		flex: 0 0 auto;
+
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: -4px;
+			width: 1px;
+			height: 140%;
+			transform: translate(0, -50%);
+			background-color: $color-stat-stroke;
+		}
+	}
+
+
+	p:nth-child(2) {
+		font-size: 16px;
+		margin: 0px 0px 0px 5px;
+		flex: 1 1 auto;
+		min-width: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+
+.finals-bracket__pilot-rounds {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	overflow: auto;
+}
+
+
+.finals-bracket__pilot-round {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+	min-width: 15px;
+
+
+	&._no-event {
+		pointer-events: none;
+	}
+
+
+	@media (hover: hover) {
+		&:hover {
+			box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+		}
+
+
+		&:active {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 10px $color-akcent2 inset;
+		}
+	}
+
+
+	@media (hover: none) {
+		&._active-animation {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+		}
+
+
+		&:active {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 10px $color-akcent2 inset;
+		}
+	}
+
+
+	&:not(:last-child) {
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 1px;
+			height: 100%;
+			background-color: $color-stat-stroke;
+		}
+	}
+}
+
+
+.finals-bracket__pilot-place {
+	text-align: center;
+	font-weight: bold;
+}
+
+
+._race-subtittle {
+	font-weight: 700;
+}
+
+
+._race-items {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+
+._race-item {
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	border: 1px solid $color-akcent1;
+	border-radius: 5px;
+}
+
+
+._name-item {
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0px 0px 0px $color-akcent1Vs, 0px 0px 0px $color-akcent1Vs inset;
+
+
+	&._no-event {
+		pointer-events: none;
+	}
+
+
+	&._active {
+		transition: all 0.3s ease;
+		border: 1px solid $color-akcent1Vs;
+		box-shadow: 0px 0px 0px $color-akcent1Vs, 0px 0px 10px $color-akcent1Vs inset;
+
+
+		&:hover {
+			box-shadow: 0px 0px 5px $color-akcent1Vs, 0px 0px 10px $color-akcent1Vs inset;
+		}
+	}
+
+
+	@media (hover: hover) {
+		&:hover {
+			box-shadow: 0px 0px 5px $color-akcent2, 0px 0px 0px $color-akcent2 inset;
+		}
+
+
+		&:active {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 10px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+		}
+	}
+
+
+	@media (hover: none) {
+		&._active-animation {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 10px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+		}
+
+
+		&:active {
+			transition: all 0.1s ease;
+			box-shadow: 0px 0px 10px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+		}
+	}
+}
+
+
+._place-item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	box-shadow: 0px 0px 5px $color-akcent2 inset, 0px 0px 2px $color-akcent2;
+}
+
+
+._float-scores {
+	font-size: 10px;
+	line-height: 0.4rem;
+	letter-spacing: normal;
+	// margin-bottom: 20px;
+	text-align: center;
+}
+
+
+._last-complete {
+	box-shadow: 0px 0px 10px var(--color-akcent1Vs) inset, 0px 0px 15px var(--color-akcent1Vs);
+}
+
+
+/* =========================================================
+   ОБВЯЗКА BRACKET — только для режима сетки
+   ========================================================= */
+
+
+.finals-bracket {
+	width: 100%;
+	display: grid;
+	row-gap: 10px;
+	column-gap: 20px;
+
+	&__buttons {
+		display: grid;
+		grid-template-columns: 0.5fr 0.5fr 0.5fr;
+		justify-items: center;
+		align-items: center;
+	}
+
+	&__vertical-table-wrapper {
+		position: relative;
+		// Клип нужен, чтобы анимация выезда не давала горизонтальный скролл.
+		// Компенсируем обрезку теней внутренним padding:
+		overflow: hidden;
+		padding: 30px 20px;
+		margin: -30px -20px;
+
+		@media(max-width:510px) {
+			padding: 10px 5px;
+			margin: -10px -5px;
+
+		}
+	}
+
+	&__vertical-table {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	&__vertical-item {
+		width: 100%;
+
+		.finals-bracket__race {
+			box-shadow: 0px 0px 0px #0b0c10 inset, 0px 0px 8px #000;
+
+			&._current {
+				box-shadow:
+					0 0 4px $color-akcent2 inset,
+					0 0 6px $color-akcent2;
+			}
+
+			&._last-complete {
+				box-shadow:
+					0 0 4px $color-akcent1Vs inset,
+					0 0 6px $color-akcent1Vs;
+			}
+
+			&._next {
+				box-shadow:
+					0 0 4px $color-grey inset,
+					0 0 6px $color-grey;
+			}
+
+			&._wrong {
+				box-shadow:
+					0 0 8px #f70 inset;
+			}
+		}
+	}
+
+	&__phase-name {
+		font-size: 22px;
+		font-weight: 600;
+		color: $color-grey;
+		min-width: 140px;
+		text-align: center;
+		letter-spacing: 0.5px;
+
+		@media (max-width: 510px) {
+			font-size: 18px;
+			min-width: 100px;
+		}
+	}
+
+	&__low-strip_vertical {
+		grid-column: auto;
+		grid-row: auto;
+		transform: none;
+		// Больше воздуха вокруг разделителя upper/lower
+		// margin: 20px 0 20px 0;
+		// (высота линии и цвет — из базового .finals-bracket__low-strip)
+	}
+
+	&__low-strip_vertical-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin: 30px 0 10px 0;
+	}
+
+	&__low-strip-label {
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		color: $color-grey;
+		opacity: 0.85;
+		text-align: left;
+		padding-left: 2px;
+
+		@media (max-width: 510px) {
+			font-size: 14px;
+		}
+	}
+
+	&__button {
+		height: 40px;
+		width: 100px;
+
+		@media (max-width: 510px) {
+			font-size: 16px;
+			height: 30px;
+			width: 60px;
+		}
+	}
+
+
+	&__tittle {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 50px;
+		align-items: center;
+
+
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: -10px;
+			left: 0;
+			width: 100%;
+			height: 3px;
+			background-color: $color-stat-stroke;
+		}
+	}
+
+
+	&__event-name {
+		font-size: clamp(16px, 1vw, 32px);
+		justify-self: end;
+	}
+
+
+	&__final-name {
+		justify-self: start;
+		font-size: clamp(16px, 1vw, 32px);
+	}
+
+
+	&__switcher {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 100px;
+		height: 20px;
+		border: 1px solid $color-akcent1;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		border-radius: 4px;
+
+
+		@media (hover: hover) {
+			&:hover {
+				box-shadow: 0px 0px 5px $color-akcent1;
+			}
+
+
+			&:active {
+				transition: all 0.15s ease;
+				box-shadow: 0px 0px 10px $color-akcent1;
+			}
+		}
+
+
+		@media (hover: none) {
+			&:active {
+				transition: all 0.15s ease;
+				box-shadow: 0px 0px 10px $color-akcent1;
+			}
+		}
+
+
+		&::after,
+		&::before {
+			content: '';
+			width: 90%;
+			height: 1px;
+			position: absolute;
+			left: 50%;
+			background-color: $color-akcent1;
+			transition: transform 0.5s ease, box-shadow 0.3s ease;
+			transform: translate(-50%, 0);
+		}
+
+
+		&:before {
+			top: 3px;
+		}
+
+
+		&::after {
+			bottom: 3px;
+		}
+	}
+
+
+	&__low-strip {
+		background-color: $color-grey;
+		opacity: 0.7;
+		width: 100%;
+		height: 2px;
+		grid-column: 1/5;
+		grid-row: 17/18;
+		transform: translate(0px, -6px);
+	}
+
+
+	&__container {
+		gap: 15px;
+	}
+
+
+	&__full-table {
+		display: grid;
+		row-gap: 10px;
+		column-gap: 20px;
+	}
+
+
+	&__vertical-table {
+		// display: grid;
+		// grid-template-rows: repeat(14, minmax(200px, auto));
+		// grid-template-columns: 1fr;
+		// gap: 30px;
+	}
+}
+
+
 
 .doubles16-results {
 

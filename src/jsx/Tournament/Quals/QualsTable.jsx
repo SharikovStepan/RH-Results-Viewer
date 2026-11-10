@@ -3,7 +3,7 @@ import React from "react";
 import { getState } from "../../../js/sharedStates";
 import { COLORS } from "../const";
 
-function QualsTable({ qualsInfo, getPilotId, activePilotId }) {
+function QualsTable({ bracketData, getPilotId, activePilotId }) {
   const handleClsick = (e) => {
     getPilotId(e);
   };
@@ -12,7 +12,7 @@ function QualsTable({ qualsInfo, getPilotId, activePilotId }) {
     <>
       <div className="quals">
         <div className="quals__container">
-          {qualsInfo.map((qualHeat) => {
+          {bracketData.map((qualHeat) => {
             const heatName = qualHeat.heatName;
             const roundsArr = qualHeat.pilots?.[0].roundsInfo;
             const pilots = qualHeat.pilots;
@@ -32,11 +32,12 @@ function QualsTable({ qualsInfo, getPilotId, activePilotId }) {
                   <div className="quals__pilots-stats">
                     <div className="quals__pilots-names" style={{ gridTemplateRows: `repeat(${pilotsQuantity},1fr)` }}>
                       {pilots.map((pilot) => {
-                        console.log("pilots", pilots);
+                        // console.log("pilots", pilots);
 
                         const nodeIndex = pilot.nodeIndex;
                         const pilotName = pilot.callsign;
                         const pilotId = pilot.id;
+
                         const channelData = { channel: pilot?.channel, color: pilot?.color || COLORS[nodeIndex] };
 
                         return (

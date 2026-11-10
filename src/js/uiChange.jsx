@@ -19,13 +19,13 @@ export async function startFileView(fileType) {
       .map(([, value]) => value) || [];
 
   //  Object.keys(getState("mainObj").heats).length
-  if (heatsData.length == 0 && !getState("raceClassesWithFinals")?.includes(+getState("currentClass"))) {
+  if (heatsData.length == 0 && !getState("raceClassesWithFinals")?.includes(getState("currentClass"))) {
     //Проверяем, есть ли вообще круги, или только создали
     console.log("ПУСТО!");
 
     document.querySelector(".main").classList.remove("_hide");
     document.querySelector(".main").append(emptyEventHTML());
-  } else if (!heatsData.length && getState("raceClassesWithFinals")?.includes(+getState("currentClass"))) {
+  } else if (!heatsData.length && getState("raceClassesWithFinals")?.includes(getState("currentClass"))) {
     console.log("EMPTY BUT FINAL!!!!");
     document.querySelector(".buttons__pilots").classList.add("_disabled");
     document.querySelector(".buttons__leaderboard").classList.add("_disabled");
@@ -47,7 +47,7 @@ export async function startFileView(fileType) {
       { name: "leaderboard", opened: false, element: document.querySelector(".leaderboard") },
       { name: "rounds", opened: false, element: document.querySelector(".rounds") },
     ]);
-    const isTournament = getState("raceClassesWithFinals")?.includes(+getState("currentClass")) ? true : false;
+    const isTournament = getState("raceClassesWithFinals")?.includes(getState("currentClass")) ? true : false;
     //  const isTournament = true
 
     tournamentRender(isTournament, false, fileType);
@@ -219,7 +219,7 @@ export function classSwitch(e) {
 
   const mainTabParam = getParamTabIndex("main");
   //переключаемся на вкладку турнира
-  if (getState("raceClassesWithFinals").includes(+raceClassNum) && mainTabParam == 3) {
+  if (getState("raceClassesWithFinals").includes(raceClassNum) && mainTabParam == 3) {
     tabSwitch(getTab("main")[mainTabParam].name, getTab("main"), "main", true);
   }
 

@@ -2146,8 +2146,8 @@ export function makeRaceClassButtons() {
 
   //проверяем классы в results и в raceClassesWithFinals
   for (let raceClass in raceClasses) {
-    if ((getState("mainObj").heats_by_class[raceClass].length != 0 && raceClasses[raceClass].leaderboard) || getState("raceClassesWithFinals")?.includes(raceClasses[raceClass].id)) {
-      raceClassesId.push(raceClasses[raceClass].id);
+	     if ((getState("mainObj").heats_by_class[raceClass].length != 0 && raceClasses[raceClass].leaderboard) || getState("raceClassesWithFinals")?.includes(raceClasses[raceClass].id.toString())) {
+		raceClassesId.push(raceClasses[raceClass].id);
       raceClassesNames.push({ id: raceClasses[raceClass].id, name: raceClasses[raceClass].name, key: raceClass });
     }
   }

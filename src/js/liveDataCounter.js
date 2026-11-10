@@ -64,12 +64,12 @@ async function refreshData(isTournament) {
   setState("mainObj", freshData.results);
   setState("liveTimestamp", freshData.lastUpdate);
   setState("fullRHData", freshData);
-  setState("raceTypesByClass", freshData.raceTypesByClass);
-  const raceClassesWithFinals = freshData.raceTypesByClass.filter((raceClass) => raceClass.raceType != "");
-  setState(
-    "raceClassesWithFinals",
-    raceClassesWithFinals.map((raceClass) => raceClass.raceClassId)
-  );
+  //   setState("raceTypesByClass", freshData.raceTypesByClass);
+  //   const raceClassesWithFinals = freshData.raceTypesByClass.filter((raceClass) => raceClass.raceType != "");
+  //   setState("raceClassesWithFinals",raceClassesWithFinals.map((raceClass) => raceClass.raceClassId));
+
+  const raceClassesWithFinals = Object.keys(freshData.tournamentData);
+  setState("raceClassesWithFinals", raceClassesWithFinals || []);
 
   //Очищаем кнопки классов - вдруг поменялись
   // document.querySelectorAll(".class-switch-buttons__button").forEach((raceClass) => {

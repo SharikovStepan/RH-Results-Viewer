@@ -1,5 +1,4 @@
 import { averageTime } from "../../js/utils";
-import { DOUBLE_ELIM_GRIDS } from "./Doubles16/const";
 
 export const setEmptyRace = (pilotsQuatity) => {
   const pilotsId = Array.from({ length: pilotsQuatity }, (_, index) => 0);

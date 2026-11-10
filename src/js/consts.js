@@ -124,9 +124,12 @@ export const RU_DICT = {
     time: "Время",
     lap: "круг",
     rounds: "Раунды",
+    round: "Раунд",
     race: "Гонка",
     semifinal: "Полуфинал",
-    final: "Финал"
+    final: "Финал",
+    lowBracket: "Нижняя сетка",
+    phases: { r16: "1/16", r8: "1/8", r4: "1/4", semi: "Полуфинал", final: "Финал" },
   },
 };
 
@@ -255,9 +258,10 @@ export const EN_DICT = {
     time: "Time",
     lap: "lap",
     rounds: "Rounds",
+    round: "Round",
     race: "Race",
-    semifinal: "Semifinal",
-    final: "Final"
+    lowBracket: "Low Bracket",
+    phases: { r16: "1/16", r8: "1/8", r4: "1/4", semi: "Semifinal", final: "Final" },
   },
 };
 

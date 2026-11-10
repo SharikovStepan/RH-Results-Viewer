@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import QualsResults from "./QualsResults";
 import QualsTable from "./QualsTable";
 import { getState } from "../../../js/sharedStates";
-function Quals({ qualsInfo, qualsLeaderboard }) {
+import QualsTableVertical from "./QualsTableVertical";
+
+function Quals({ bracketData, leaderboardData, config, getPilotId, activePilotId, isMobile }) {
   const [activeTab, setActiveTab] = useState("");
-  const [activePilotId, setActivePilotId] = useState(null);
-  console.log("qualsInfoqualsInfo", qualsInfo);
+  //   const [activePilotId, setActivePilotId] = useState(null);
+  //   console.log("bracketDatabracketData", bracketData);
 
   const getUrlParams = () => {
     return new URLSearchParams(window.location.search);
@@ -29,15 +31,15 @@ function Quals({ qualsInfo, qualsLeaderboard }) {
     window.history.pushState({}, "", newUrl);
   };
 
-  const getPilotId = (e) => {
-    const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id");
+  //   const getPilotId = (e) => {
+  //     const id = e.target.closest("._pilot-button")?.getAttribute("pilot-id");
 
-    if (id == activePilotId) {
-      setActivePilotId(null);
-    } else {
-      setActivePilotId(id);
-    }
-  };
+  //     if (id == activePilotId) {
+  //       setActivePilotId(null);
+  //     } else {
+  //       setActivePilotId(id);
+  //     }
+  //   };
 
   return (
     <>
@@ -49,8 +51,13 @@ function Quals({ qualsInfo, qualsLeaderboard }) {
           {getState("textStrings").tournamentTab.results}
         </button>
       </div>
-      {activeTab == "table" && <QualsTable getPilotId={getPilotId} activePilotId={activePilotId}  qualsInfo={qualsInfo} />}
-      {activeTab == "results" && <QualsResults getPilotId={getPilotId} activePilotId={activePilotId} qualsLeaderboard={qualsLeaderboard} />}
+      {activeTab == "table" &&
+        (isMobile ? (
+          <QualsTableVertical getPilotId={getPilotId} activePilotId={activePilotId} bracketData={bracketData} config={config} />
+        ) : (
+          <QualsTable getPilotId={getPilotId} activePilotId={activePilotId} bracketData={bracketData} config={config} />
+        ))}
+      {activeTab == "results" && <QualsResults getPilotId={getPilotId} activePilotId={activePilotId} leaderboardData={leaderboardData} config={config} />}{" "}
     </>
   );
 }

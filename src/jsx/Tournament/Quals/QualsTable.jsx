@@ -2,6 +2,7 @@ import ChannelAndColor from "../../ChannelAndColor";
 import React from "react";
 import { getState } from "../../../js/sharedStates";
 import { COLORS } from "../const";
+import { goToRoundAction } from "../../../js/playRound";
 
 function QualsTable({ bracketData, getPilotId, activePilotId }) {
   const handleClsick = (e) => {
@@ -68,6 +69,13 @@ function QualsTable({ bracketData, getPilotId, activePilotId }) {
                                 const timeResult = laps == qualsLaps ? timeString : `${laps}/${timeString}`;
                                 return (
                                   <div
+                                    onClick={(e) => {
+                                      const roundHeatId = roundInfo.heatId || null;
+                                      const roundId = roundInfo.roundId || null;
+                                      if (roundHeatId !== null && roundId !== null) {
+                                        goToRoundAction(roundId, roundHeatId);
+                                      }
+                                    }}
                                     key={`pilot-${pilotId}-time-${index}`}
                                     className={`quals__pilot-time pilot-1-time-1 ${isBestTime && !isFirstQual ? "_best-quals-time" : ""} ${laps != qualsLaps ? `_bad-qual-time` : ""}`}>
                                     <p>{timeResult}</p>

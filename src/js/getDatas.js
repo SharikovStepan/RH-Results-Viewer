@@ -269,6 +269,8 @@ export function getRound(roundNum, heatNum) {
     }
   });
 
+  if (!lapsCount.length) return null;
+
   roundInfo.maxLaps = Math.max(...lapsCount); //ищем максимальное количество кругов и добавляем в инфу по раунду;
 
   //тут будем сортировать по 3 лучшим кругам + holeshot

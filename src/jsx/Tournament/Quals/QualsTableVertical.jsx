@@ -6,6 +6,7 @@ import ChannelAndColor from "../../ChannelAndColor";
 import { getState } from "../../../js/sharedStates";
 import { COLORS } from "../const";
 import { useUrlPhase } from "../useUrlPhase";
+import { goToRoundAction } from "../../../js/playRound";
 
 function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) {
   const maxRoundsFromData = Math.max(1, ...bracketData.flatMap((heat) => heat.pilots.map((p) => p.roundsInfo?.length || 0)));
@@ -194,7 +195,16 @@ function QualsTableVertical({ bracketData, getPilotId, activePilotId, config }) 
 
                             return (
                               <div className="quals__pilot-times">
-                                <div key={`${pilotName}-${pilotId}-time`} className="quals__pilot-time">
+                                <div
+                                  onClick={(e) => {
+                                    const roundHeatId = roundInfo.heatId || null;
+                                    const roundId = roundInfo.roundId || null;
+                                    if (roundHeatId !== null && roundId !== null) {
+                                      goToRoundAction(roundId, roundHeatId);
+                                    }
+                                  }}
+                                  key={`${pilotName}-${pilotId}-time`}
+                                  className="quals__pilot-time">
                                   {roundInfo?.isRoundResults ? (
                                     (() => {
                                       const timeStamp = roundInfo.timeStamp;

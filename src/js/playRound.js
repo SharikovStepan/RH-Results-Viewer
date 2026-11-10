@@ -21,7 +21,12 @@ let intervalButtonsAccept = null;
 
 export function goToRoundAction(round, heat, buttonPressed) {
   const tabWrap = document.querySelector(".tabs-wrapper");
+  console.log("goToRoundAction");
+
   currentRoundInfo = getRound(+round, +heat);
+
+  if (!currentRoundInfo) return;
+
   tabWrap.after(writeRound(+round, +heat));
   const roundElement = document.querySelector(".round");
   const exitButton = document.querySelector(".round__exit-button");
@@ -253,11 +258,14 @@ export function startRound() {
           timeoutMultiplier = 1;
         }
 
-        holeShots[pilotName].interval = setTimeout(() => {
-          lapState[pilotName][0] = true;
-          // holeShots[pilotName].state = false;
-          if (getState("CONSOLE_DEBUG")) console.log("SETT TIME");
-        }, holeShots[pilotName].timeout * +fixedRoundSpeed * timeoutMultiplier);
+        holeShots[pilotName].interval = setTimeout(
+          () => {
+            lapState[pilotName][0] = true;
+            // holeShots[pilotName].state = false;
+            if (getState("CONSOLE_DEBUG")) console.log("SETT TIME");
+          },
+          holeShots[pilotName].timeout * +fixedRoundSpeed * timeoutMultiplier,
+        );
       }
 
       // let currentCount = 0;
@@ -265,7 +273,6 @@ export function startRound() {
       // const intervalTime = 100;
 
       intervals[pilotName][lapIndex] = setInterval(() => {
-			
         // if (pilotName == 'BeeHolder') if(getState('CONSOLE_DEBUG'))console.log('INTERVALLLL', lapIndex);
 
         if (lapState[pilotName][lapIndex]) {
@@ -367,7 +374,7 @@ export function speedChange(sliderElement) {
   if (roundPlayState == "play") startRound();
 }
 
-export function roundShow(round, buttonRound) {
+export function roundShow(round, buttonRound = null) {
   const element = {
     container: round.firstElementChild,
     tittle: round.querySelector(".round__tittle"),
@@ -381,7 +388,7 @@ export function roundShow(round, buttonRound) {
     names: round.querySelectorAll(".round__graph-area-name"),
   };
 
-  buttonRound.classList.add("_no-event"); //запрещаем кнопку, где время
+  if (buttonRound) buttonRound.classList.add("_no-event"); //запрещаем кнопку, где время
 
   setTimeout(() => {
     //удаляем классы 'скрыто'
@@ -411,7 +418,7 @@ export function roundShow(round, buttonRound) {
 
   setTimeout(() => {
     element.container.classList.remove("_no-events");
-    buttonRound.classList.remove("_no-event");
+    if (buttonRound) buttonRound.classList.remove("_no-event");
     element.buttons.classList.remove("_no-event");
     element.exitBtn.classList.remove("_no-event");
     element.playButton.classList.remove("_hidden-play-button");

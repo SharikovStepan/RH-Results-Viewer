@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import ChannelAndColor from "../../ChannelAndColor";
 import { getState } from "../../../js/sharedStates";
+import { goToRoundAction } from "../../../js/playRound";
 
 function RaceCard({ raceData, raceNum, gridRow, gridColumn, pilotsQuantity, roundsQuantity = 3, racePhaseText, statusText, loserClassName, glowClassName, activePilotId, pilotButton }) {
   const losersNums = Array.from({ length: Math.floor(pilotsQuantity / 2) }, (_, index) => pilotsQuantity - 1 - index);
@@ -68,7 +69,16 @@ function RaceCard({ raceData, raceNum, gridRow, gridColumn, pilotsQuantity, roun
                   const pilotRoundData = roundData.filter((data) => data.id == pilotData.id)[0];
                   if (pilotRoundData?.id) {
                     return (
-                      <div key={`round-${roundIndex}`} className="finals-bracket__pilot-round">
+                      <div
+                        onClick={(e) => {
+                          const roundHeatId = raceData.roundHeatIds?.[roundIndex] || null;
+                          const roundId = raceData.roundIds?.[roundIndex] || null;
+                          if (roundHeatId !== null && roundId !== null) {
+                            goToRoundAction(roundId, roundHeatId);
+                          }
+                        }}
+                        key={`round-${roundIndex}`}
+                        className="finals-bracket__pilot-round">
                         {pilotRoundData?.place ? pilotRoundData.place : "-"}
                       </div>
                     );

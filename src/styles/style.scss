@@ -6025,6 +6025,69 @@ body {
 		align-items: center;
 		min-width: 76px;
 		height: 100%;
+		border-radius: 10px;
+
+
+		p {
+			cursor: pointer;
+
+			@media(max-width:510px) {
+				padding: 4px 4px;
+
+			}
+
+			padding: 4px 20px;
+			transition: all 0.3 ease;
+			border-radius: 5px;
+			overflow: hidden;
+
+			&._no-event {
+				pointer-events: none;
+			}
+
+
+			@media(hover:hover) {
+				&:hover {
+					box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+				}
+
+
+				&:active {
+					transition: all 0.1s ease;
+					box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 10px $color-akcent2 inset;
+				}
+			}
+
+
+			@media(hover:none) {
+				&._active-animation {
+					transition: all 0.1s ease;
+					box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 5px $color-akcent2 inset;
+				}
+
+
+				&:active {
+					transition: all 0.1s ease;
+					box-shadow: 0px 0px 0px $color-akcent2, 0px 0px 10px $color-akcent2 inset;
+				}
+			}
+
+
+		}
+
+		// &:not(:last-child) {
+			// &::after {
+				// content: '';
+				// position: absolute;
+				// top: 0;
+				// right: 0;
+				// width: 1px;
+				// height: 100%;
+				// background-color: $color-stat-stroke;
+			// }
+
+
+		// }
 
 		&._best-quals-time {
 			p {

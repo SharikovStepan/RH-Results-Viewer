@@ -17,8 +17,10 @@ export async function urlUpload() {
     //  const raceClassesWithFinals = fullLiveData.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     //   setState("raceClassesWithFinals", raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId) || []);
 
-    const raceClassesWithFinals = Object.keys(fullLiveData.tournamentData);
-    setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    if (fullLiveData.tournamentData) {
+      const raceClassesWithFinals = Object.keys(fullLiveData.tournamentData);
+      setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    }
 
     console.log("FULL OBJ", fullLiveData);
     //  setState("isUuid", ''); Уже есть uuid
@@ -198,8 +200,10 @@ export async function loadLastFile() {
     //  const raceClassesWithFinals = fullResponse.data.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     //  setState("raceClassesWithFinals",raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId));
 
-    const raceClassesWithFinals = Object.keys(fullResponse.data.tournamentData);
-    setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    if (fullResponse.data.tournamentData) {
+      const raceClassesWithFinals = Object.keys(fullResponse.data.tournamentData);
+      setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    }
 
     setState("isUuid", getState("lastFile").uuid);
     setState("liveTimestamp", getState("lastFile").lastUpdate);
@@ -248,8 +252,10 @@ export async function loadDateFile(uuid) {
     //  const raceClassesWithFinals = fullResponse.data.raceTypesByClass?.filter((raceClass) => raceClass.raceType != "");
     //  setState("raceClassesWithFinals",raceClassesWithFinals?.map((raceClass) => raceClass.raceClassId));
 
-    const raceClassesWithFinals = Object.keys(fullResponse.data.tournamentData);
-    setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    if (fullResponse.data.tournamentData) {
+      const raceClassesWithFinals = Object.keys(fullResponse.data.tournamentData);
+      setState("raceClassesWithFinals", raceClassesWithFinals || []);
+    }
 
     setState("isUuid", uuid);
     setState("liveTimestamp", fileListData.lastUpdate);
